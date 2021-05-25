@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { ListResponseModel } from '../models/listResponseModel';
 import { ResponseModel } from '../models/responseModel';
 import { UserOperationClaim } from '../models/userOperationClaims/userOperationClaim';
+import { UserOperationClaimDto } from '../models/userOperationClaims/userOperationClaimDto';
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +26,8 @@ export class UserOperationClaimService {
     return this.httpClient.post<ResponseModel>(this.apiUrl+"userOperationClaims/update",userOperationClaim);
   }
 
-  getAll(): Observable<ListResponseModel<UserOperationClaim>>{
+  getAll(): Observable<ListResponseModel<UserOperationClaimDto>>{
     let newPath = this.apiUrl + "userOpearionClaims/getall=";
-    return this.httpClient.get<ListResponseModel<UserOperationClaim>>(newPath);
+    return this.httpClient.get<ListResponseModel<UserOperationClaimDto>>(newPath);
   }
 }

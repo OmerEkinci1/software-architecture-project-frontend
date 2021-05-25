@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ListResponseModel } from '../models/listResponseModel';
 import { Project } from '../models/projects/project';
+import { ProjectCreationDto } from '../models/projects/projectCreationDto';
 import { ProjectDetailDto } from '../models/projects/projectDetailDto';
 import { ProjectGeneralDto } from '../models/projects/projectGeneralDto';
 import { ResponseModel } from '../models/responseModel';
@@ -16,11 +17,15 @@ export class ProjectGeneralService {
   apiUrl = "https://localhost:44380/api/";
   constructor(private httpClient:HttpClient) { }
 
-  add(project:Project): Observable<ResponseModel> {
-    return this.httpClient.post<ResponseModel>(this.apiUrl+"projectGeneral/add",project);
+  add(projectCreationDto:ProjectCreationDto): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(this.apiUrl+"projectGeneral/add",projectCreationDto);
   }
 
   delete(project:Project): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(this.apiUrl+"projectGeneral/delete",project);
+  }
+
+  update(project:Project): Observable<ResponseModel> {
     return this.httpClient.post<ResponseModel>(this.apiUrl+"projectGeneral/delete",project);
   }
   
@@ -28,5 +33,10 @@ export class ProjectGeneralService {
   getProjectByProjectID(ProjectID:number): Observable<ListResponseModel<ProjectGeneralDto>>{
     let newPath = this.apiUrl + "projectGeneral/getprojectbyprojectid?projectID="+ProjectID;
     return this.httpClient.get<ListResponseModel<ProjectGeneralDto>>(newPath);
+  }
+
+  getAll(): Observable<ListResponseModel<ProjectDetailDto>>{
+    let newPath = this.apiUrl + "projectGeneral/getall";
+    return this.httpClient.get<ListResponseModel<ProjectDetailDto>>(newPath);
   }
 }

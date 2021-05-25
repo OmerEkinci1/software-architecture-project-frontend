@@ -1,1 +1,82 @@
-<p>department-type works!</p>
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--7">
+  <!-- Dark table -->
+  <div class="row mt-3">
+    <div class="col">
+      <div class="card bg-default shadow">
+        <div class="container" style="display: flex; flex-direction: row; align-items: flex-start;">
+            <div class="card-header bg-transparent border-0">
+                <h3 class="text-white mb-0">All Department Types</h3>
+            </div>
+            <div class="card-header bg-transparent border-0 container" >
+              <button (click)="openModal(templateadd)" class="btn btn-primary">Create</button>
+            </div>
+        </div>
+        
+        <div class="table-responsive">
+          <table class="table align-items-center table-dark table-flush">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Department Type Name</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let dep of departmentTypeName">
+                <td>{{ dep.deoartmentTypeName }}</td>
+                <td>
+                    <button (click)="openModal(templateupdate)" class="btn btn-primary">Update</button>
+                </td>                   
+              </tr>     
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #templateadd>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Add Departmetnt Type</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="departmentTypeForm">
+        <div class="mb-3">
+            <label >Worker</label>
+            <input type="text" formControlName="DepartmentTypeName" class="form-control" placeholder="Enter the department Type name">
+        </div>
+        <div class="mb-3">
+            <input type="submit" (click)="addDepartmentTypes()" class="btn btn-primary" placeholder="Submit">
+        </div>      
+    </form>
+</div>
+</ng-template>
+
+<ng-template #templateupdate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Update Department Type</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="departmentTypeForm">
+        <div class="mb-3">
+            <label>Departmetn Type Name</label>
+            <input [(ngModel)]="departmentTypes.departmentTypeName" disabled="true" type="text" formControlName="DepartmentTypeName" class="form-control">
+        </div>
+        <div class="mb-3">
+            <input type="submit" (click)="updateDepartmentTypes()" class="btn btn-primary" placeholder="Submit">
+        </div>
+        
+    </form>
+</div>
+</ng-template>
+
+

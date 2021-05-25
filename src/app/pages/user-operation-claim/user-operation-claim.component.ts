@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { UserOperationClaim } from 'src/app/models/userOperationClaims/userOperationClaim';
+import { UserOperationClaimDto } from 'src/app/models/userOperationClaims/userOperationClaimDto';
 import { UserOperationClaimService } from 'src/app/services/user-operation-claim.service';
 
 @Component({
@@ -12,6 +13,7 @@ import { UserOperationClaimService } from 'src/app/services/user-operation-claim
 export class UserOperationClaimComponent implements OnInit {
 
   userOperationClaims : UserOperationClaim[] = []
+  userOperationClaimDto : UserOperationClaimDto[] = []
   dataLoaded = false
 
   constructor(
@@ -35,7 +37,7 @@ export class UserOperationClaimComponent implements OnInit {
 
   getUserOperationClaims(){
     this.userOperationClaimService.getAll().subscribe((response) => {
-      this.userOperationClaims = response.data
+      this.userOperationClaimDto = response.data
       this.dataLoaded = true
     })
   }
@@ -60,7 +62,9 @@ export class UserOperationClaimComponent implements OnInit {
 
   deleteUserOperationClaim(userOperationClaim:UserOperationClaim){
     this.userOperationClaimService.delete(userOperationClaim).subscribe((response => {
-      this.toastrService.success(response.message);
+      this.toastrService.success(
+        "Worker is deleted"
+      );
     }),errorResponse=>{
       if (errorResponse.error.error.length>0){
         for(let i=0; i < errorResponse.error.error.length; i++){

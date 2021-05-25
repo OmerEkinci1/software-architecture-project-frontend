@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, TemplateRef } from '@angular/core';
+import {FormGroup,FormControl, Validators, FormBuilder  } from "@angular/forms";
+import { ActivatedRoute, Router } from '@angular/router';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { User } from 'src/app/models/users/user';
 import { UserService } from 'src/app/services/user.service';
@@ -11,23 +13,33 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class UserProfileComponent implements OnInit {
 
-  users: User[] = []
+  users: User
   dataLoaded = false
 
   constructor(
     private userService: UserService,
     private toastrService: ToastrService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private activatedRoute: ActivatedRoute,
+    private modalService: BsModalService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
+    this.getUsersByID();
+    this.createUserUpdateForm();
+
   }
 
   userUpdateForm : FormGroup
+  modalRef : BsModalRef
+
+  openModal(template: TemplateRef<any>){
+    this.modalRef = this.modalService.show(template);
+  }
 
   createUserUpdateForm(){
     this.userUpdateForm = this.formBuilder.group({
-      DepartmentTypeID:['', Validators.required],
       Name:['', Validators.required],
       Surname:['', Validators.required],
       Email:['',Validators.required],
@@ -35,9 +47,11 @@ export class UserProfileComponent implements OnInit {
     })
   }
 
-  getUsersByID(UserID:number){
+  getUsersByID(){
+    let UserID = Number(localStorage.getItem("userID"))
     this.userService.get(UserID).subscribe((response) => {
       this.users = response.data
+      console.log(response.data)
       this.dataLoaded = true
     })
   }
@@ -45,8 +59,10 @@ export class UserProfileComponent implements OnInit {
   updateUser(){
     if(this.userUpdateForm.valid){
       let userModel = Object.assign({}, this.userUpdateForm.value);
+      userModel.userID = Number(localStorage.getItem("userID"));
       this.userService.update(userModel).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
+        this.router.navigate(['']);
       },
       (responseError) => {
         if (responseError.error.Errors.length > 0) {
@@ -60,9 +76,14 @@ export class UserProfileComponent implements OnInit {
     }
   }
 
-  deleteUser(user:User){
+  deleteUser(){
+    let user = this.users;
+    localStorage.removeItem("token")
+    localStorage.removeItem("expiration")
+    localStorage.removeItem("userID")
     this.userService.delete(user).subscribe((response => {
       this.toastrService.success(response.message);
+      this.router.navigate(['']);
     }),errorResponse=>{
       if (errorResponse.error.error.length>0){
         for(let i=0; i < errorResponse.error.error.length; i++){

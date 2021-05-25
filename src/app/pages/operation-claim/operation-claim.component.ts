@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { OperationClaim } from 'src/app/models/operationClaim/operationClaim';
 import { OperationClaimService } from 'src/app/services/operation-claim.service';
@@ -11,17 +12,25 @@ import { OperationClaimService } from 'src/app/services/operation-claim.service'
 })
 export class OperationClaimComponent implements OnInit {
 
+  modalRef: BsModalRef;
+
   operationClaims : OperationClaim[] = []
   dataLoaded = false
   constructor(
     private formBuilder: FormBuilder,
     private operationClaimService: OperationClaimService,
     private toastrService: ToastrService,
+    private modalService: BsModalService,
   ) { }
+
+  openModal(template: TemplateRef<any>){
+    this.modalRef = this.modalService.show(template);
+  }
 
   operationClaimForm: FormGroup
 
   ngOnInit(): void {
+    this.getOperationClaims()
   }
 
   createOperationClaimForm() {
@@ -54,7 +63,7 @@ export class OperationClaimComponent implements OnInit {
       this.toastrService.error("Your form is missing", "Warning");
     }
   }
-  
+
   updateOperationClaim(){
     if(this.operationClaimForm.valid){
       let operationClaimModel = Object.assign({}, this.operationClaimForm.value);

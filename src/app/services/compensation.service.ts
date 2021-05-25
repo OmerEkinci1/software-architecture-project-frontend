@@ -23,7 +23,7 @@ export class CompensationService {
   }
 
   getAll(): Observable<ListResponseModel<WorkerCompensationDto>>{
-    let newPath = this.apiUrl + "compensations/getall=";
+    let newPath = this.apiUrl + "compensations/getall";
     return this.httpClient.get<ListResponseModel<WorkerCompensationDto>>(newPath);
   }
 

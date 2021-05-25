@@ -1,1 +1,47 @@
-<p>user-operation-claim works!</p>
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--7">
+  <!-- Dark table -->
+  <div class="row mt-5">
+    <div class="col">
+      <div class="card bg-default shadow">
+        <div class="container" style="display: flex; flex-direction: row; align-items: flex-start;">
+          <div class="card-header bg-transparent border-0" style="margin-right: 300px;">
+            <h3 class="text-white mb-0">All User Claims</h3>
+          </div>
+          <div class="card-header bg-transparent border-0 container" >
+            <button (click)="routerLink" routerLink="worker-add" class="btn btn-primary">Create</button>
+          </div>
+        </div> 
+        <div class="table-responsive">
+          <table class="table align-items-center table-dark table-flush">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">User Name</th>
+                <th scope="col">User Surname</th>
+                <th scope="col">Operation Claim Name</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of UserOperationClaimDto | filterPipe : filterText">
+                <td>{{ user.name }}</td>
+                <td>{{ user.surname }}</td>
+                <td>{{ user.operationClaimName }}  Hours</td>
+                <td>
+                    <div class="row">
+                        <button (click)="deleteUserOperationClaim(userOperationClaim)" class="btn btn-danger">Delete</button>
+                        <button (click)="updateUserOperationClaim()" class="btn btn-primary">Update</button>
+                    </div>
+                </td>                 
+              </tr>     
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+

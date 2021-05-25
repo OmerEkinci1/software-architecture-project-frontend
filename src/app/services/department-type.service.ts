@@ -22,7 +22,7 @@ export class DepartmentTypeService {
   }
 
   getAll(): Observable<ListResponseModel<DepartmentType>>{
-    let newPath = this.apiUrl + "departmentTypes/getall=";
+    let newPath = this.apiUrl + "departmentTypes/getall";
     return this.httpClient.get<ListResponseModel<DepartmentType>>(newPath);
   }
 }

@@ -7,7 +7,6 @@ import { ClipboardModule } from 'ngx-clipboard';
 
 import { AdminLayoutRoutes } from './admin-layout.routing';
 import { DashboardComponent } from '../../pages/dashboard/dashboard.component';
-import { MapsComponent } from '../../pages/maps/maps.component';
 import { UserProfileComponent } from '../../pages/user-profile/user-profile.component';
 import { TablesComponent } from '../../pages/tables/tables.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -24,13 +23,19 @@ import { SalaryComponent } from 'src/app/pages/salary/salary.component';
 import { WorkerComponent } from 'src/app/pages/worker/worker.component';
 import { WorkerDepartmentTypesComponent } from 'src/app/pages/worker-department-types/worker-department-types.component';
 import { WorkerSalaryExperiencesComponent } from 'src/app/pages/worker-salary-experiences/worker-salary-experiences.component';
+import { BrowserModule } from '@angular/platform-browser';
+import { FilterPipePipe } from 'src/app/pipes/filter-pipe.pipe';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ModalModule } from 'ngx-bootstrap/modal';
 // import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule.forChild(AdminLayoutRoutes),
+    ModalModule.forRoot(),
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     NgbModule,
     ClipboardModule
@@ -52,8 +57,9 @@ import { WorkerSalaryExperiencesComponent } from 'src/app/pages/worker-salary-ex
     WorkerSalaryExperiencesComponent,
     UserProfileComponent,
     TablesComponent,
-    MapsComponent
-  ]
+    FilterPipePipe,
+  ],
+
 })
 
 export class AdminLayoutModule {}

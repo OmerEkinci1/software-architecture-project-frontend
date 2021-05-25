@@ -22,8 +22,8 @@ export class UserService {
     return this.httpClient.post<ResponseModel>(this.apiUrl+"users/update",user);
   }
 
-  get(UserID:number): Observable<ListResponseModel<User>>{
+  get(UserID:number): Observable<SingleResponseModel<User>>{
     let newPath = this.apiUrl + "users/get?userID="+UserID;
-    return this.httpClient.get<ListResponseModel<User>>(newPath);
+    return this.httpClient.get<SingleResponseModel<User>>(newPath);
   }
 }

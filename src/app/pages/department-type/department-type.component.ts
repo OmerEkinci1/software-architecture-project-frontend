@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { DepartmentType } from 'src/app/models/departmentTypes/departmentType';
 import { DepartmentTypeService } from 'src/app/services/department-type.service';
@@ -13,10 +14,12 @@ export class DepartmentTypeComponent implements OnInit {
 
   departmentTypes : DepartmentType[] = []
   dataLoaded = false;
+  modalRef : BsModalRef;
 
   constructor(
     private formBuilder: FormBuilder,
     private departmentTypeService: DepartmentTypeService,
+    private modalService: BsModalService,
     private toastrService: ToastrService,
   ) { }
 
@@ -25,6 +28,10 @@ export class DepartmentTypeComponent implements OnInit {
   ngOnInit(): void {
     this.getDepartmentTypes()
     this.createDepartmentTypeForm()
+  }
+
+  openModal(template: TemplateRef<any>){
+    this.modalRef = this.modalService.show(template);
   }
 
   createDepartmentTypeForm() {
