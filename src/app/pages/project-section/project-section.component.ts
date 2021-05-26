@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { ProjectSection } from 'src/app/models/projectSections/projectSection';
 import { ProjectSectionsService } from 'src/app/services/project-sections.service';
@@ -19,17 +20,24 @@ export class ProjectSectionComponent implements OnInit {
     private projectSectionService : ProjectSectionsService,
     private toastrService : ToastrService,
     private formBuilder : FormBuilder,
+    private modalService: BsModalService,
     private activatedRoute : ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+    this.createProjectSectionForm()
     this.activatedRoute.queryParams.subscribe((params) => {
       if(params['ProjectID'])
         this.getByProjectID(params['ProjectID'])
     })
   }
 
+  openModal(template: TemplateRef<any>){
+    this.modalRef = this.modalService.show(template);
+  }
+
   projectSectionForm : FormGroup
+  modalRef : BsModalRef;
 
   createProjectSectionForm () {
     this.projectSectionForm = this.formBuilder.group({

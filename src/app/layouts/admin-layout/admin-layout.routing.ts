@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 
 import { DashboardComponent } from '../../pages/dashboard/dashboard.component';
 import { UserProfileComponent } from '../../pages/user-profile/user-profile.component';
-import { TablesComponent } from '../../pages/tables/tables.component';
 import { CompensationComponent } from 'src/app/pages/compensation/compensation.component';
 import { DepartmentTypeComponent } from 'src/app/pages/department-type/department-type.component';
 import { OperationClaimComponent } from 'src/app/pages/operation-claim/operation-claim.component';
@@ -15,12 +14,13 @@ import { UserOperationClaimComponent } from 'src/app/pages/user-operation-claim/
 import { WorkerComponent } from 'src/app/pages/worker/worker.component';
 import { WorkerDepartmentTypesComponent } from 'src/app/pages/worker-department-types/worker-department-types.component';
 import { WorkerSalaryExperiencesComponent } from 'src/app/pages/worker-salary-experiences/worker-salary-experiences.component';
+import { SalaryComponent } from 'src/app/pages/salary/salary.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent },
     { path: 'user-profile',   component: UserProfileComponent },
-    { path: 'tables',         component: TablesComponent },
     { path: 'compensations',  component: CompensationComponent },
+    { path: 'salary',  component: SalaryComponent },
     { path: 'department-types',component: DepartmentTypeComponent },
     { path: 'operation-claim',component: OperationClaimComponent },
     { path: 'project',        component: ProjectComponent },

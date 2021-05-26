@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { ProjectWorkerWorkingTime } from 'src/app/models/projectWorkerWorkingTimes/projectWorkerWorkingTime';
 import { ProjectWorkerWorkingTimeDto } from 'src/app/models/projectWorkerWorkingTimes/projectWorkerWorkingTimeDto';
@@ -21,6 +22,7 @@ export class ProjectWorkerWorkingTimeComponent implements OnInit {
     private projectWorkerWorkingTimeService : ProjectWorkerWorkingTimeService,
     private formBuilder : FormBuilder,
     private toastrService : ToastrService,
+    private modalService: BsModalService,
     private activatedRoute : ActivatedRoute
   ) { }
 
@@ -34,6 +36,11 @@ export class ProjectWorkerWorkingTimeComponent implements OnInit {
   }
 
   projectWorkerWorkingTimeUpdateForm : FormGroup
+  modalRef : BsModalRef;
+
+  openModal(template: TemplateRef<any>){
+    this.modalRef = this.modalService.show(template);
+  }
 
   createProjectWorkerWorkingTime () {
     this.projectWorkerWorkingTimeUpdateForm = this.formBuilder.group({

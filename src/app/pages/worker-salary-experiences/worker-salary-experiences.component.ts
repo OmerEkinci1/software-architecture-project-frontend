@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { WorkerSalaryExperience } from 'src/app/models/workerSalaryExperiences/workerSalaryExperience';
 import { WorkerSalaryExperienceDto } from 'src/app/models/workerSalaryExperiences/workerSalaryExperienceDto';
@@ -20,20 +21,36 @@ export class WorkerSalaryExperiencesComponent implements OnInit {
     private workerSalaryExperienceService : WorkerSalaryExperienceService,
     private toastrService : ToastrService,
     private formBuilder : FormBuilder,
+    private modalService: BsModalService,
     private activatedRoute : ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
+    this.getProjects()
+    this.createWorkerSalaryExperienceForm()
   }
 
   workerSalaryExperiencesForm : FormGroup
+  modalRef : BsModalRef;
+
+  openModal(template: TemplateRef<any>){
+    this.modalRef = this.modalService.show(template);
+  }
 
   createWorkerSalaryExperienceForm () {
     this.workerSalaryExperiencesForm = this.formBuilder.group({
-      DepartmentTypeID:['', Validators.required],
+      DepartmentTypeName:['', Validators.required],
       Year:['', Validators.required],
       minHourSalary:['', Validators.required],
       maxHourSalary:['',Validators.required],
+    })
+  }
+
+  getProjects(){
+    this.workerSalaryExperienceService.getAll().subscribe((response) => {
+      this.workerSalaryExperienceDtos = response.data
+      console.log(response.data)
+      this.dataLoaded = true
     })
   }
 

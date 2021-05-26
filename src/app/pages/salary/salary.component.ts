@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { Salary } from 'src/app/models/salaries/salary';
 import { WorkerSalaryDto } from 'src/app/models/salaries/workerSalaryDto';
@@ -13,14 +14,18 @@ import { SalaryService } from 'src/app/services/salary.service';
 })
 export class SalaryComponent implements OnInit {
 
-  salaries : Salary[] = []
+  salaries : Salary = {}
+  salary : Salary[] = []
+  salaryDto : WorkerSalaryDto
   workerSalaryDto : WorkerSalaryDto[] = []
   dataLoaded = false
+  modalRef : BsModalRef;
 
   constructor(
     private salaryService:SalaryService,
     private formBuilder:FormBuilder,
     private toastrService:ToastrService,
+    private modalService: BsModalService,
     private activatedRoute : ActivatedRoute,
   ) { }
 
@@ -35,12 +40,33 @@ export class SalaryComponent implements OnInit {
     })
   }
 
+  openModal(template: TemplateRef<any>, salaryDto: WorkerSalaryDto){
+    this.salaryDto = salaryDto
+    this.salaries.WorkerID = this.salaryDto.SalaryID  
+    this.salaries.WorkerID = this.salaryDto.WorkerID 
+    this.salaries.UserID = this.salaryDto.UserID 
+    this.salaries.SalaryDate = this.salaryDto.SalaryDate 
+    this.salaries.SalaryAmount = this.salaryDto.SalaryAmount 
+    this.modalRef = this.modalService.show(template)
+  }
+
   salaryForm : FormGroup
+  salaryUpdateForm: FormGroup
 
   createSalaryForm() {
     this.salaryForm = this.formBuilder.group({
       WorkerID:['', Validators.required],
       UserID:['', Validators.required],
+      SalaryAmount:['', Validators.required],
+    })
+  }
+
+  createSalarynUpdateForm() {
+    this.salaryUpdateForm = this.formBuilder.group({
+      WorkerName:['',Validators.required],
+      WorkerSurname:['',Validators.required],
+      UserName:['',Validators.required],
+      UserSurname:['',Validators.required],
       SalaryAmount:['', Validators.required],
     })
   }
@@ -92,7 +118,7 @@ export class SalaryComponent implements OnInit {
     this.salaryService.getByUserID(UserID).subscribe(response => {
       this.workerSalaryDto = response.data,
       this.dataLoaded = true
-      if (this.salaries.length == 0) {
+      if (this.salary.length == 0) {
         this.toastrService.info("There is no record for your filter.","Result of searching");
       }
     })
@@ -102,7 +128,7 @@ export class SalaryComponent implements OnInit {
     this.salaryService.getByWorkerID(WorkerID).subscribe(response => {
       this.workerSalaryDto = response.data,
       this.dataLoaded = true
-      if (this.salaries.length == 0) {
+      if (this.salary.length == 0) {
         this.toastrService.info("There is no record for your filter.","Result of searching");
       }
     })

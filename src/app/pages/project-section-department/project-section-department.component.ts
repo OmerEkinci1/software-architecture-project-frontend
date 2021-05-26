@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { ProjectSectionDepartment } from 'src/app/models/projectSectionDepartments/projectSectionDepartment';
 import { ProjectSectionDepartmentService } from 'src/app/services/project-section-department.service';
@@ -19,6 +20,7 @@ export class ProjectSectionDepartmentComponent implements OnInit {
     private projectSectionDepartmentService : ProjectSectionDepartmentService,
     private formBuilder : FormBuilder,
     private toastrService : ToastrService,
+    private modalService: BsModalService,
     private activatedRoute : ActivatedRoute,
   ) { }
 
@@ -30,12 +32,17 @@ export class ProjectSectionDepartmentComponent implements OnInit {
   }
 
   projectSectionDepartmentForm : FormGroup
+  modalRef : BsModalRef;
 
   createProjectSectiomDepartmentForm () {
     this.projectSectionDepartmentForm = this.formBuilder.group({
       ProjectSectionID:['', Validators.required],
       DeaprtmentTypeID:['', Validators.required],
     })
+  }
+
+  openModal(template: TemplateRef<any>){
+    this.modalRef = this.modalService.show(template);
   }
 
   addProjectSectionDepartment(){

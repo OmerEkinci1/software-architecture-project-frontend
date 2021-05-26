@@ -26,4 +26,9 @@ export class WorkerDepartmentTypeService {
     let newPath = this.apiUrl + "workerDepartmentTypes/getallbydepartmenttypeid?departmentTypeID="+departmentTypeID;
     return this.httpClient.get<ListResponseModel<WorkerDepartmentDto>>(newPath);
   }
+
+  getAll(): Observable<ListResponseModel<WorkerDepartmentDto>>{
+    let newPath = this.apiUrl + "workerDepartmentTypes/getall";
+    return this.httpClient.get<ListResponseModel<WorkerDepartmentDto>>(newPath);
+  }
 }

@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { WorkerDepartmentDto } from 'src/app/models/workerDepartmentTypes/workerDepartmentDto';
 import { WorkerDepartmentType } from 'src/app/models/workerDepartmentTypes/workerDepartmentType';
@@ -21,22 +22,39 @@ export class WorkerDepartmentTypesComponent implements OnInit {
     private workerDepartmentTypeService : WorkerDepartmentTypeService,
     private formBuilder : FormBuilder,
     private toastrService : ToastrService,
+    private modalService: BsModalService,
     private activatedRoute : ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+    this.getWorkerDepartments()
+    this.createWorkerDepartmentTypeForm()
     this.activatedRoute.queryParams.subscribe((params) => {
       if(params['DepartmentTypeID'])
         this.getAllWorkersByDepartmentTypeID(params['DepartmentTypeID'])
     })
   }
 
+  openModal(template: TemplateRef<any>){
+    this.modalRef = this.modalService.show(template);
+  }
+
+  modalRef : BsModalRef;
   workerDepartmentTypeForm : FormGroup
+  workerDepartmentTypeUpdateForm : FormGroup
 
   createWorkerDepartmentTypeForm() {
     this.workerDepartmentTypeForm = this.formBuilder.group({
       WorkerID:['', Validators.required],
       DepartmentTypeID:['', Validators.required],
+    })
+  }
+
+  getWorkerDepartments(){
+    this.workerDepartmentTypeService.getAll().subscribe((response) => {
+      this.workerDepartmentDto = response.data
+      console.log(response.data)
+      this.dataLoaded = true
     })
   }
 

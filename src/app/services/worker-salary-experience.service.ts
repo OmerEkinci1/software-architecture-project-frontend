@@ -22,6 +22,11 @@ export class WorkerSalaryExperienceService {
     return this.httpClient.post<ResponseModel>(this.apiUrl+"workerSalaryExperiences/update",workerSalaryExperience);
   }
 
+  getAll(): Observable<ListResponseModel<WorkerSalaryExperienceDto>>{
+    let newPath = this.apiUrl + "workerSalaryExperiences/getall";
+    return this.httpClient.get<ListResponseModel<WorkerSalaryExperienceDto>>(newPath);
+  }
+
   getByDepartmentTypeID(DepartmentTypeID:number): Observable<ListResponseModel<WorkerSalaryExperienceDto>>{
     let newPath = this.apiUrl + "workerSalaryExperiences/getbydepartmenttypeid?departmentTypeID="+DepartmentTypeID;
     return this.httpClient.get<ListResponseModel<WorkerSalaryExperienceDto>>(newPath);

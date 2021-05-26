@@ -8,7 +8,6 @@ import { ClipboardModule } from 'ngx-clipboard';
 import { AdminLayoutRoutes } from './admin-layout.routing';
 import { DashboardComponent } from '../../pages/dashboard/dashboard.component';
 import { UserProfileComponent } from '../../pages/user-profile/user-profile.component';
-import { TablesComponent } from '../../pages/tables/tables.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CompensationComponent } from 'src/app/pages/compensation/compensation.component';
 import { DepartmentTypeComponent } from 'src/app/pages/department-type/department-type.component';
@@ -56,7 +55,6 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     WorkerDepartmentTypesComponent,
     WorkerSalaryExperiencesComponent,
     UserProfileComponent,
-    TablesComponent,
     FilterPipePipe,
   ],
 

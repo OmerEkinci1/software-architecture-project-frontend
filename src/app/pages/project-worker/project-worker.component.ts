@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { ProjectWorker } from 'src/app/models/projectWorkers/projectWorker';
 import { ProjectWorkerGeneralDto } from 'src/app/models/projectWorkers/projectWorkerGeneralDto';
@@ -22,15 +23,22 @@ export class ProjectWorkerComponent implements OnInit {
     private formBuilder : FormBuilder,
     private projectWorkerService : ProjectWorkerService,
     private toastrService : ToastrService,
+    private modalService: BsModalService,
     private activatedRoute : ActivatedRoute,
     private projectGeneralService : ProjectGeneralService,
   ) { }
 
   ngOnInit(): void {
     this.getProjectWorkers()
+    this.createProjectWorkerForm()
   }
 
   projectWorkerForm : FormGroup
+  modalRef : BsModalRef;
+
+  openModal(template: TemplateRef<any>){
+    this.modalRef = this.modalService.show(template);
+  }
 
   createProjectWorkerForm () {
     this.projectWorkerForm = this.formBuilder.group({

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ListResponseModel } from '../models/listResponseModel';
 import { ProjectSectionDepartment } from '../models/projectSectionDepartments/projectSectionDepartment';
+import { ProjectSectionDepartmentDto } from '../models/projectSectionDepartments/projectSectionDepartmentDto';
 import { ResponseModel } from '../models/responseModel';
 import { SingleResponseModel } from '../models/singleResponseModel';
 
@@ -29,5 +30,10 @@ export class ProjectSectionDepartmentService {
   getBySectionID(sectionID:number): Observable<ListResponseModel<ProjectSectionDepartment>>{
     let newPath = this.apiUrl + "projectSectionDepartments/getbysectionid?sectionID="+sectionID;
     return this.httpClient.get<ListResponseModel<ProjectSectionDepartment>>(newPath);
+  }
+
+  getAll(): Observable<ListResponseModel<ProjectSectionDepartmentDto>>{
+    let newPath = this.apiUrl + "projectSectionDepartments/getall";
+    return this.httpClient.get<ListResponseModel<ProjectSectionDepartmentDto>>(newPath);
   }
 }

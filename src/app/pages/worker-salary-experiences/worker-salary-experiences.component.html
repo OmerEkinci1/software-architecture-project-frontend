@@ -1,1 +1,118 @@
-<p>worker-salary-experiences works!</p>
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--7">
+  <!-- Dark table -->
+  <div class="row mt-3">
+    <div class="col">
+      <div class="card bg-default shadow">
+        <div class="container" style="display: flex; flex-direction: row; align-items: flex-start;">
+            <div class="card-header bg-transparent border-0">
+                <h3 class="text-white mb-0">All Worker Salary Experiences</h3>
+            </div>
+            <div class="card-header bg-transparent border-0 container">
+                <input class="form-control" [(ngModel)]="filterText" id="filterText" type="text" placeholder="Search salary experiences">
+            </div>
+            <div class="card-header bg-transparent border-0 container" >
+              <button (click)="openModal(templateadd)" class="btn btn-primary">Create</button>
+            </div>
+        </div>
+        
+        <div class="table-responsive">
+          <table class="table align-items-center table-dark table-flush">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Department Type Name</th>
+                <th scope="col">Year</th>
+                <th scope="col">Min Hour Salary</th>
+                <th scope="col">Max Hour Salary</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let wse of workerSalaryExperienceDto | filterPipe : filterText">
+                <td>{{ wse.departmentTypeName }}</td>
+                <td>{{ wse.year }}</td>
+                <td>{{ wse.minHourSalary }} </td>
+                <td>{{ wse.maxHourSalary}}</td>
+                <td>
+                    <button (click)="openModal(templateupdate)" class="btn btn-primary">Update</button>
+                </td>                   
+              </tr>     
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #templateadd>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Add Worker Department Type</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="workerSalaryExperiencesForm">
+        <div class="mb-3">
+            <label >Department Type Name</label>
+            <input type="text" formControlName="DepartmentTypeName" class="form-control" placeholder="Enter the department type name">
+        </div>
+        <div class="mb-3">
+          <label >Year</label>
+          <input type="text" formControlName="Year" class="form-control" placeholder="Enter the year">
+        </div>
+        <div class="mb-3">
+          <label>Min Hour Salary</label>
+          <input type="text" formControlName="minHourSalary" class="form-control" placeholder="Enter the min hour salary">
+        </div>
+        <div class="mb-3">
+            <label>Max Hour Salary</label>
+            <input type="text" formControlName="maxHourSalary" class="form-control" placeholder="Enter the max hour salary">
+          </div>
+        <div class="mb-3">
+            <input type="submit" (click)="addWorkerSalaryExperiences()" class="btn btn-primary" placeholder="Submit">
+        </div>
+        
+    </form>
+</div>
+</ng-template>
+
+<ng-template #templateupdate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Update Worker Department Type</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="workerSalaryExperiencesForm">
+        <div class="mb-3">
+            <label>Department Type Name</label>
+            <input [(ngModel)]="workerSalaryExperienceDto.departmentTypeName" disabled="true" type="text" formControlName="DepartmentTypeName" class="form-control">
+        </div>
+        <div class="mb-3">
+          <label>Year</label>
+          <input [(ngModel)]="workerSalaryExperienceDto.year" disabled="true" type="text" formControlName="Year"class="form-control">
+      </div>
+        <div class="mb-3">
+          <label>Min Hour Salary</label>
+          <input [(ngModel)]="workerSalaryExperienceDto.minHourSalary" disabled="true" type="text" formControlName="minHourSalary" class="form-control">
+        </div>
+        <div class="mb-3">
+          <label>Max Hour Salary</label>
+          <input [(ngModel)]="workerSalaryExperienceDto.maxHourSalary" disabled="true" type="text" formControlName="maxHourSalary" class="form-control">
+        </div>
+        <div class="mb-3">
+            <input type="submit" (click)="updateWorkerSalaryExperiences()" class="btn btn-primary" placeholder="Submit">
+        </div>
+        
+    </form>
+</div>
+</ng-template>
+
+
+
+
