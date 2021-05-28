@@ -15,6 +15,7 @@ import { ComponentsModule } from './components/components.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { ProjectDetailsComponent } from './pages/project-details/project-details.component';
+import { ProjectWorkerComponent } from './pages/project-worker/project-worker.component';
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import { ProjectDetailsComponent } from './pages/project-details/project-details
     AppComponent,
     AdminLayoutComponent,
     AuthLayoutComponent,
+    
     
     
   ],

@@ -1,7 +1,6 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray , ValidatorFn, AbstractControl} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Console } from 'console';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { DepartmentType } from 'src/app/models/departmentTypes/departmentType';
@@ -13,14 +12,11 @@ import { ProjectSectionDepartment } from 'src/app/models/projectSectionDepartmen
 import { ProjectSectionKeepListDepartmentDto } from 'src/app/models/projectSectionDepartments/projectSectionKeepListDepartmentDto';
 import { ProjectSection } from 'src/app/models/projectSections/projectSection';
 import { ProjectSectionCreationDto } from 'src/app/models/projectSections/projectSectionCreationDto';
-import { ProjectWorker } from 'src/app/models/projectWorkers/projectWorker';
 import { ProjectWorkerDto } from 'src/app/models/projectWorkers/projectWorkerDto';
-import { ProjectWorkerGeneralDto } from 'src/app/models/projectWorkers/projectWorkerGeneralDto';
 import { DepartmentTypeService } from 'src/app/services/department-type.service';
 import { ProjectGeneralService } from 'src/app/services/project-general.service';
 import { ProjectSectionDepartmentService } from 'src/app/services/project-section-department.service';
 import { ProjectSectionsService } from 'src/app/services/project-sections.service';
-import { ProjectWorkerService } from 'src/app/services/project-worker.service';
 
 @Component({
   selector: 'app-project',
@@ -33,27 +29,21 @@ export class ProjectComponent implements OnInit {
   project
   projectSection
   projectSectionDepartment
-  projectWorker
   projects: Project[] = [];
   projectGeneralDto : ProjectGeneralDto[] = []
   projectDetailDto : ProjectDetailDto[] = []
   projectSections : ProjectSection[] = []
   projectSectionCreationDto:ProjectSectionCreationDto[]=[]
   projectSectionDepartments : ProjectSectionDepartment[] = []
-  // projectAdded:ProjectCreationDto
-  projectWorkers : ProjectWorker[] = []
-  projectWorkerGeneralDtos : ProjectWorkerGeneralDto[] = []
-  // convertProjectDetailToProject
   convertProjectDetailToProject
   projectForUpdate:Project
 
   projectForm: FormGroup
   projectSectionForm : FormGroup
   projectSectionDepartmentForm : FormGroup
-  projectWorkerForm : FormGroup
+  
   modalRef : BsModalRef;
   IncrementalForm : FormGroup
-
 
   projectCreationDto:ProjectCreationDto
   dataLoaded = false;
@@ -63,8 +53,7 @@ export class ProjectComponent implements OnInit {
     private projectGeneralService:ProjectGeneralService,
     private projectSectionService : ProjectSectionsService,
     private projectSectionDepartmentService : ProjectSectionDepartmentService,
-    private departmentTypeService : DepartmentTypeService,
-    private projectWorkerService : ProjectWorkerService,
+    private departmentTypeService : DepartmentTypeService,  
     private activatedRoute: ActivatedRoute,
     private modalService: BsModalService,
     private toastrService: ToastrService) { }
@@ -75,7 +64,6 @@ export class ProjectComponent implements OnInit {
     this.createProjectAddForm();
     this.createProjectSectionForm()
     this.createProjectSectiomDepartmentForm()
-    this.createProjectWorkerForm()
     this.getProjects()
     // this.activatedRoute.params.subscribe(params=> {
     //   if(params["ProjectID"]){
@@ -129,11 +117,7 @@ export class ProjectComponent implements OnInit {
     console.log(this.projectSectionDepartment)
   }
 
-  openModalForProjectWorkerUpdate(template: TemplateRef<any>, projectworker: ProjectWorkerDto){
-    this.projectWorker=new ProjectWorkerDto(projectworker)
-    this.modalRef = this.modalService.show(template)
-    console.log(this.projectWorker)
-  }
+  
 
   
   addNext() {
@@ -186,13 +170,6 @@ export class ProjectComponent implements OnInit {
     })
   }
 
-  createProjectWorkerForm () {
-    this.projectWorkerForm = this.formBuilder.group({
-      projectWorker:['', Validators.required],
-      project:['', Validators.required],
-    })
-  }
-
   getProjects(){
     this.projectGeneralService.getAll().subscribe((response) => {
       this.projectDetailDto = response.data
@@ -208,12 +185,7 @@ export class ProjectComponent implements OnInit {
     })
   }
 
-  getProjectWorkers(){
-    this.projectWorkerService.getAll().subscribe((response) => {
-      this.projectWorkerGeneralDtos = response.data
-      this.dataLoaded = true
-    })
-  }
+  
 
   addProject(){
     console.log("geldi")
@@ -401,54 +373,5 @@ export class ProjectComponent implements OnInit {
   //       this.toastrService.info("There is no record for your filter.","Result of searching");
   //     }
   //   })
-  // }
-
-  // // PROJECT WORKER // 
-  // addProjectWorkers(){
-  //   if(this.projectWorkerForm.valid){
-  //     let projectWorkerModel = Object.assign({}, this.projectWorkerForm.value);
-  //     this.projectWorkerService.add(projectWorkerModel).subscribe((response) => {
-  //       this.toastrService.success(response.message, "Success");
-  //     },
-  //     (responseError) => {
-  //       if (responseError.error.Errors.length > 0) {
-  //         for (let index = 0; index < responseError.error.Errors.length; index++){
-  //           this.toastrService.error(responseError.error.Errors[index].ErrorMessage, "Verification Error");
-  //         }
-  //       }       
-  //     })
-  //   } else {
-  //     this.toastrService.error("Your form is missing", "Warning");
-  //   }
-  // }
-
-  // deleteProjectWorker(projectWorker:ProjectWorker){
-  //   this.projectWorkerService.delete(projectWorker).subscribe((response => {
-  //     this.toastrService.success(response.message);
-  //   }),errorResponse=>{
-  //     if (errorResponse.error.error.length>0){
-  //       for(let i=0; i < errorResponse.error.error.length; i++){
-  //         this.toastrService.error(errorResponse.error.error[i].ErrorMessage,"Verification Error");
-  //       }
-  //     }
-  //   })
-  // }
-
-  // updateProjectWorkers(){
-  //   if(this.projectWorkerForm.valid){
-  //     let projectWorkerModel = Object.assign({}, this.projectWorkerForm.value);
-  //     this.projectWorkerService.update(projectWorkerModel).subscribe((response) => {
-  //       this.toastrService.success(response.message, "Success");
-  //     },
-  //     (responseError) => {
-  //       if (responseError.error.Errors.length > 0) {
-  //         for (let index = 0; index < responseError.error.Errors.length; index++){
-  //           this.toastrService.error(responseError.error.Errors[index].ErrorMessage, "Verification Error");
-  //         }
-  //       }       
-  //     })
-  //   } else {
-  //     this.toastrService.error("Your form is missing", "Warning");
-  //   }
   // }
 }

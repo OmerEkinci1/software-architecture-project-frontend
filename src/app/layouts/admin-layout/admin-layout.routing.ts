@@ -12,6 +12,7 @@ import { WorkerDepartmentTypesComponent } from 'src/app/pages/worker-department-
 import { WorkerSalaryExperiencesComponent } from 'src/app/pages/worker-salary-experiences/worker-salary-experiences.component';
 import { SalaryComponent } from 'src/app/pages/salary/salary.component';
 import { ProjectDetailsComponent } from 'src/app/pages/project-details/project-details.component';
+import { ProjectWorkerComponent } from 'src/app/pages/project-worker/project-worker.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent },
@@ -21,6 +22,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'department-types',component: DepartmentTypeComponent },
     { path: 'operation-claim',component: OperationClaimComponent },
     { path: 'project',        component: ProjectComponent },
+    { path: 'project-worker',        component: ProjectWorkerComponent },
     { path: 'project-details/:id',        component: ProjectDetailsComponent },
     { path: 'project-worker-working-time',component: ProjectWorkerWorkingTimeComponent },
     { path: 'worker',         component: WorkerComponent },

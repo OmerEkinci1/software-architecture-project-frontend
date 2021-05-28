@@ -27,7 +27,7 @@ export class ProjectWorkerService {
   }
 
   getAll(): Observable<ListResponseModel<ProjectWorkerGeneralDto>>{
-    let newPath = this.apiUrl + "projectWorkers/getall=";
+    let newPath = this.apiUrl + "projectWorkers/getall";
     return this.httpClient.get<ListResponseModel<ProjectWorkerGeneralDto>>(newPath);
   }
 }

@@ -28,7 +28,7 @@ export class ProjectSectionDepartmentService {
   }
   // burada bir sectionun birden fazla departmentı gelicek ondan kaynaklı list olucak.
   getBySectionID(sectionID:number): Observable<ListResponseModel<ProjectSectionDepartment>>{
-    let newPath = this.apiUrl + "projectSectionDepartments/getbysectionid?sectionID="+sectionID;
+    let newPath = this.apiUrl + "projectsectiondepartments/getbysectionid?sectionID="+sectionID;
     return this.httpClient.get<ListResponseModel<ProjectSectionDepartment>>(newPath);
   }
 

@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { ListResponseModel } from '../models/listResponseModel';
 import { ProjectSection } from '../models/projectSections/projectSection';
 import { ResponseModel } from '../models/responseModel';
-import { SingleResponseModel } from '../models/singleResponseModel';
 
 @Injectable({
   providedIn: 'root'
@@ -15,19 +14,19 @@ export class ProjectSectionsService {
   constructor(private httpClient:HttpClient) { }
 
   add(projectSection:ProjectSection): Observable<ResponseModel> {
-    return this.httpClient.post<ResponseModel>(this.apiUrl+"projectSections/add",projectSection);
+    return this.httpClient.post<ResponseModel>(this.apiUrl+"projectsections/add",projectSection);
   }
 
   delete(projectSection:ProjectSection): Observable<ResponseModel> {
-    return this.httpClient.post<ResponseModel>(this.apiUrl+"projectSections/delete",projectSection);
+    return this.httpClient.post<ResponseModel>(this.apiUrl+"projectsections/delete",projectSection);
   }
 
   update(projectSection:ProjectSection): Observable<ResponseModel> {
-    return this.httpClient.post<ResponseModel>(this.apiUrl+"projectSections/update",projectSection);
+    return this.httpClient.post<ResponseModel>(this.apiUrl+"projectsections/update",projectSection);
   }
 
   getByProjectID(ProjectID:number): Observable<ListResponseModel<ProjectSection>>{
-    let newPath = this.apiUrl + "projectSections/getbyprojectid?projectID="+ProjectID;
+    let newPath = this.apiUrl + "projectsections/getbyprojectid?projectID="+ProjectID;
     return this.httpClient.get<ListResponseModel<ProjectSection>>(newPath);
   }
 }

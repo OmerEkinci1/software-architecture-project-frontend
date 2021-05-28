@@ -1,0 +1,119 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+</div>
+<div class="container-fluid mt--7">
+    <div class="row mt-3">
+        <div class="col">
+          <div class="card bg-default shadow">
+            <div class="container" style="display: flex; flex-direction: row; align-items: flex-start;">
+                <div class="card-header bg-transparent border-0">
+                    <h3 class="text-white mb-0">All Project Workers</h3>
+                </div>
+                <div class="card-header bg-transparent border-0 container">
+                    <input class="form-control" [(ngModel)]="filterText" id="filterText" type="text" placeholder="Search project workers">
+                </div>
+                <div class="card-header bg-transparent border-0 container" >
+                  <button (click)="openModal(templateaddprojectworker)" class="btn btn-primary">Create</button>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+              <table class="table align-items-center table-dark table-flush">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">Project Name</th>
+                    <th scope="col">Manager Name</th>
+                    <th scope="col">Manager Surname</th>
+                    <th scope="col">Project Section Name</th>
+                    <th scope="col">Department Type Name</th>
+                    <th scope="col">Worker Name</th>
+                    <th scope="col">Worker Surname</th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let pw of projectWorkerGeneralDto | filterPipe : filterText">
+                    <td>{{ pw.projectName }}</td>
+                    <td>{{ pw.name }}</td>
+                    <td>{{ pw.surname }} </td>
+                    <td>{{ pw.projectSectionName}}</td>
+                    <td>{{ pw.departmentTypeName }}</td>
+                    <td>{{ pw.workerName | currency  }}</td>
+                    <td>{{ pw.workerSurname }}</td>
+                    <td>
+                        <button (click)="deleteProjectWorker(projectWorker)" class="btn btn-danger">Delete</button>
+                        <button (click)="openModal(templateupdateprojectworker,projectworker)" class="btn btn-primary">Update</button>
+                    </td>                   
+                  </tr>     
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+
+<ng-template #templateaddprojectworker>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Add Project Worker</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="projectWorkerForm"> 
+        <div class="mb-3">
+            <label >Project</label>
+            <select formControlName="Project" (change)='getProjectSections($event.target.value)' class="form-control">
+              <option  *ngFor="let p of projects" [value]="p.projectID">{{p.projectName}}</option> 
+            </select>
+        </div>
+        <div class="mb-3">
+            <label >Project Section</label>
+            <select formControlName="ProjectSection" class="form-control" (change)='getProjectSectionDepartments($event.target.value)'> 
+              <option *ngFor="let ps of projectSections" [value]="ps.projectSectionID">{{ps.projectSectionName}}</option> 
+            </select>
+        </div>
+        <div class="mb-3">
+            <label >Project Section Department</label>
+            <select formControlName="ProjectSectionDepartment" class="form-control">
+              <option *ngFor="let psd of projectSectionDepartments" [value]="psd.projectSectionDepartmentID">{{psd.projectSectionName}}</option> 
+            </select>
+        </div>
+        <div class="mb-3">
+            <label >Worker</label>
+            <select formControlName="Worker" class="form-control">
+              <option *ngFor="let w of projectWorker" [value]="w.workerID"> {{w.workerName}} {{w.workerSurname }}</option> 
+            </select>
+        </div>
+        <div class="mb-3">
+            <input type="submit" (click)="addProjectWorkers()" class="btn btn-primary" placeholder="Submit">
+        </div>
+        
+    </form>
+</div>
+</ng-template>
+
+<ng-template #templateupdateprojectworker>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Update Project Worker</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="projectWorkerForm">
+        <div class="mb-3">
+            <label>Project</label>
+            <input [(ngModel)]="compensationDto.workerName" disabled="true" type="text" formControlName="project" class="form-control">
+        </div>
+        <div class="mb-3">
+          <label>Worker</label>
+          <input [(ngModel)]="compensationDto.workerSurname" disabled="true" type="text" formControlName="projectWorker"class="form-control">
+        </div>
+        <div class="mb-3">
+            <input type="submit" (click)="updateProjectWorkers()" class="btn btn-primary" placeholder="Submit">
+        </div>
+        
+    </form>
+</div>
+</ng-template>

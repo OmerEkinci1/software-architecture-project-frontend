@@ -26,6 +26,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRippleModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { ProjectDetailsComponent } from 'src/app/pages/project-details/project-details.component';
+import { ProjectWorkerComponent } from 'src/app/pages/project-worker/project-worker.component';
 // import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
@@ -51,6 +52,7 @@ import { ProjectDetailsComponent } from 'src/app/pages/project-details/project-d
     ProjectWorkerWorkingTimeComponent,
     SalaryComponent,
     WorkerComponent,
+    ProjectWorkerComponent,
     ProjectDetailsComponent,
     WorkerDepartmentTypesComponent,
     WorkerSalaryExperiencesComponent,
