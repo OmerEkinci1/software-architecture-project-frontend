@@ -14,15 +14,15 @@ export class DepartmentTypeService {
   constructor(private httpClient:HttpClient) { }
 
   add(departmentType:DepartmentType): Observable<ResponseModel> {
-    return this.httpClient.post<ResponseModel>(this.apiUrl+"departmentTypes/add",departmentType);
+    return this.httpClient.post<ResponseModel>(this.apiUrl+"departmenttypes/add",departmentType);
   }
 
   update(departmentType:DepartmentType): Observable<ResponseModel> {
-    return this.httpClient.post<ResponseModel>(this.apiUrl+"departmentTypes/update",departmentType);
+    return this.httpClient.post<ResponseModel>(this.apiUrl+"departmenttypes/update",departmentType);
   }
 
   getAll(): Observable<ListResponseModel<DepartmentType>>{
-    let newPath = this.apiUrl + "departmentTypes/getall";
+    let newPath = this.apiUrl + "departmenttypes/getall";
     return this.httpClient.get<ListResponseModel<DepartmentType>>(newPath);
   }
 }

@@ -26,4 +26,9 @@ export class UserService {
     let newPath = this.apiUrl + "users/get?userID="+UserID;
     return this.httpClient.get<SingleResponseModel<User>>(newPath);
   }
+
+  getalluserbystatustrue(): Observable<ListResponseModel<User>>{
+    let newPath = this.apiUrl + "users/getalluserbystatustrue";
+    return this.httpClient.get<ListResponseModel<User>>(newPath);
+  }
 }

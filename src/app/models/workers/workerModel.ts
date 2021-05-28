@@ -1,4 +1,4 @@
-export interface Worker{
+export interface WorkerModel{
     WorkerID:number;
     WorkerName:string;
     WorkerSurname:string;

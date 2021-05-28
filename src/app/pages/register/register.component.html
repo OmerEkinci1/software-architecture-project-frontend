@@ -30,7 +30,21 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
                 </div>
-                <input formControlName="departmentTypeID" class="form-control" placeholder="Department" type="number">
+                <select class="form-control" formControlName="departmentTypeID">
+                  <option *ngFor="let dep of departmentType" [value]="dep.departmentTypeID">{{dep.departmentTypeName}}</option> 
+                </select>
+                <!-- <mat-form-field appearance="fill">
+                  <mat-label>Departments</mat-label>
+                    <mat-select>
+                      <mat-option *ngFor="let dep of departmentType" [value]="dep.departmentTypeName">
+                        {{dep.departmentTypeName}}
+                      </mat-option>
+                    </mat-select>
+                   <select *ngFor ="let dep of departmentType" formControlName="departmentTypeID" matNativeControl required>
+                    <option [(ngModel)]="dep.departmentTypeName"></option>                    
+                  </select> 
+                </mat-form-field> -->
+                <!-- <input formControlName="departmentTypeID" class="form-control" placeholder="Department" type="number"> -->
               </div>
             </div>
             <div class="form-group">
@@ -73,4 +87,5 @@
       </div>
     </div>
   </div>
+
 </div>

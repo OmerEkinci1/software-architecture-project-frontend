@@ -46,7 +46,7 @@
                 <td>{{ salary.name }}  </td>
                 <td>{{ salary.surname}}</td>
                 <td>
-                    <button (click)="openModal(templateupdate,compensation)" class="btn btn-primary">Update</button>
+                    <button (click)="openModal(templateupdate,salary)" class="btn btn-primary">Update</button>
                 </td>                   
               </tr>     
             </tbody>
@@ -67,16 +67,20 @@
   <div class="modal-body">
     <form [formGroup]="salaryForm">
         <div class="mb-3">
-            <label >Worker</label>
-            <input type="text" formControlName="WorkerID" class="form-control" placeholder="Enter the worker name">
+          <label >Worker</label>
+          <select formControlName="WorkerID" class="form-control">
+            <option *ngFor="let w of worker" [value]="w.workerID">{{w.workerName}} {{w.workerSurname }}</option> 
+          </select>
         </div>
         <div class="mb-3">
           <label >User</label>
-          <input type="text" formControlName="UserID" class="form-control" placeholder="Enter the hr name">
+          <select formControlName="UserID" class="form-control">
+            <option *ngFor="let u of users" [value]="u.userID">{{u.name}} {{u.surname}}</option> 
+          </select>
         </div>
         <div class="mb-3">
           <label>Salary Amount</label>
-          <input type="text" formControlName="SalaryAmount" class="form-control" placeholder="Enter the salary amount">
+          <input type="number" formControlName="SalaryAmount" class="form-control" placeholder="Enter the salary amount">
         </div>
         <div class="mb-3">
             <input type="submit" (click)="addSalary()" class="btn btn-primary" placeholder="Submit">

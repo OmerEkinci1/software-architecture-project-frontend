@@ -38,11 +38,11 @@
                 <td>{{ worker.hourSalary | currency }}</td>
                 <td>{{ worker.startTime }}</td>  
                 <td>
-                <table>
-                    <tr *ngFor="let department of worker.departmentType">
-                        <td >{{ department.departmentTypeName }}</td>    
-                    </tr>
-                </table>
+                  <table>
+                      <tr *ngFor="let department of worker.departmentType">
+                          <td >{{ department.departmentTypeName }}</td>    
+                      </tr>
+                  </table>
                 </td>
                 <td>
                     <div class="row">
@@ -67,11 +67,17 @@
     </button>
   </div>
   <div class="modal-body">
-    <form [formGroup]="operationClaimForm">
+    <form [formGroup]="workerForm">
         <div class="mb-3">
           <label for="workerName">Department Type Name</label>
-          <select >
-            <option *ngFor="let dep of departmetnTypes">{{ dep.departmentTypeName }}</option>
+          <select multiple="true" class="form-control" formControlName="departmentTypeID">
+            <option *ngFor="let dep of departmentTypes" [value]="dep.departmentTypeID">{{ dep.departmentTypeName }}</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label >HR Name</label>
+          <select formControlName="userID" class="form-control">
+            <option *ngFor="let u of users" [value]="u.userID">{{u.name}} {{u.surname }}</option> 
           </select>
         </div>
         <div class="mb-3">
@@ -84,7 +90,7 @@
         </div>
         <div class="mb-3">
           <label for="workerName">Daily Working Time</label>
-          <input type="text" formControlName="DailyWorkingTime" class="form-control" placeholder="Enter the daily working time">
+          <input type="number" formControlName="DailyWorkingTime" class="form-control" placeholder="Enter the daily working time">
         </div>
         <div class="mb-3">
           <label for="workerName">Hour Salary</label>

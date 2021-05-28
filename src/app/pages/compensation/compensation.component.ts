@@ -5,7 +5,11 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { Compensation } from 'src/app/models/compensations/compensation';
 import { WorkerCompensationDto } from 'src/app/models/compensations/workerCompensationDto';
+import { User } from 'src/app/models/users/user';
+import { WorkerModel } from 'src/app/models/workers/workerModel';
 import { CompensationService } from 'src/app/services/compensation.service';
+import { UserService } from 'src/app/services/user.service';
+import { WorkerService } from 'src/app/services/worker.service';
 
 @Component({
   selector: 'app-compensation',
@@ -14,9 +18,12 @@ import { CompensationService } from 'src/app/services/compensation.service';
 })
 export class CompensationComponent implements OnInit {
 
-  compensations: Compensation = {}
-  compensationDto : WorkerCompensationDto
+  compensations
+  compensationAdd
+  //compensationDto : WorkerCompensationDto
   workerCompensationDto : WorkerCompensationDto[] = []
+  users : User[] = []
+  worker : WorkerModel[] = []
   dataLoaded = false;
   modalRef : BsModalRef;
   filterText = "";
@@ -24,6 +31,8 @@ export class CompensationComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private compensationService: CompensationService,
+    private userService: UserService,
+    private workerService: WorkerService,
     private toastrService: ToastrService,
     private modalService: BsModalService,
     private activatedRoute: ActivatedRoute,
@@ -32,19 +41,20 @@ export class CompensationComponent implements OnInit {
   compensationForm : FormGroup;
   compensationUpdateForm : FormGroup;
 
-  openModal(template: TemplateRef<any>, compensationDto: WorkerCompensationDto){
-    this.compensationDto = compensationDto
-    console.log(compensationDto)
-    this.compensations.CompensationID = this.compensationDto.CompensationID  
-    this.compensations.WorkerID = this.compensationDto.WorkerID 
-    this.compensations.UserID = this.compensationDto.UserID 
-    this.compensations.CompensationDate = this.compensationDto.CompensationDate 
-    this.compensations.CompensationAmount = this.compensationDto.CompensationAmount 
+  openModal(template: TemplateRef<any>, compensationDtoFromHtml: WorkerCompensationDto){
+    console.log(compensationDtoFromHtml)
+    this.compensations=new WorkerCompensationDto(compensationDtoFromHtml)
     this.modalRef = this.modalService.show(template)
     console.log(this.compensations)
   }
 
+  openModalAdd(template: TemplateRef<any>){
+    this.modalRef = this.modalService.show(template);
+  }
+
   ngOnInit(): void {
+    this.getWorkerByStatusFalse()
+    this.getUserByStatusTrue()
     this.createCompensationForm()
     this.createCompensationUpdateForm()
     this.activatedRoute.queryParams.subscribe((params) => {
@@ -57,8 +67,8 @@ export class CompensationComponent implements OnInit {
 
   createCompensationForm() {
     this.compensationForm = this.formBuilder.group({
-      WorkerID:['', Validators.required],
-      UserID:['', Validators.required],
+      WorkerID:[, Validators.required],
+      UserID:[, Validators.required],
       CompensationAmount:['', Validators.required],
     })
   }
@@ -80,10 +90,28 @@ export class CompensationComponent implements OnInit {
     })
   }
 
+  getUserByStatusTrue(){
+    this.userService.getalluserbystatustrue().subscribe((response) => {
+      this.users = response.data
+      this.dataLoaded = true
+    })
+  }
+
+  getWorkerByStatusFalse(){
+    this.workerService.getallworkerstatusfalse().subscribe((response) => {
+      this.worker = response.data
+      this.dataLoaded = true
+    })
+  }
+
+
+
   addCompensation(){
-    if(this.compensationForm.valid){
-      let compensationModel = Object.assign({}, this.compensationForm.value);
-      this.compensationService.add(compensationModel).subscribe((response) => {
+    if(this.compensationForm.valid){     
+      console.log(this.compensationForm.value) 
+      this.compensationAdd=new Compensation(Number(this.compensationForm.value.UserID),Number(this.compensationForm.value.WorkerID),this.compensationForm.value.CompensationAmount)
+      console.log(this.compensationAdd)
+      this.compensationService.add(this.compensationAdd).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
       },
       (responseError) => {
@@ -101,8 +129,6 @@ export class CompensationComponent implements OnInit {
   updateCompensation(){
     if(this.compensationUpdateForm.valid){
       console.log(this.compensations)
-      console.log(this.compensationUpdateForm.value.CompensationAmount)
-      this.compensations.CompensationAmount = this.compensationUpdateForm.value.CompensationAmount;
       this.compensationService.update(this.compensations).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
       },

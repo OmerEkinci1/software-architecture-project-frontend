@@ -15,7 +15,7 @@ export class WorkerDepartmentTypeService {
   constructor(private httpClient:HttpClient) { }
 
   add(workerDepartmentType:WorkerDepartmentType): Observable<ResponseModel> {
-    return this.httpClient.post<ResponseModel>(this.apiUrl+"workerDepartmentTypes/add",workerDepartmentType);
+    return this.httpClient.post<ResponseModel>(this.apiUrl+"workerdepartmenttypes/add",workerDepartmentType);
   }
 
   delete(workerDepartmentType:WorkerDepartmentType): Observable<ResponseModel> {

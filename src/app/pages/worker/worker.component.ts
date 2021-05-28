@@ -4,10 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { DepartmentType } from 'src/app/models/departmentTypes/departmentType';
-import { Worker } from 'src/app/models/workers/worker';
+import {  WorkerModel } from 'src/app/models/workers/workerModel';
 import { WorkerDto } from 'src/app/models/workers/workerDto';
 import { DepartmentTypeService } from 'src/app/services/department-type.service';
 import { WorkerService } from 'src/app/services/worker.service';
+import { User } from 'src/app/models/users/user';
+import { UserService } from 'src/app/services/user.service';
+import { WorkerCreationDto } from 'src/app/models/workers/workerCreationDto';
 
 @Component({
   selector: 'app-worker',
@@ -16,8 +19,10 @@ import { WorkerService } from 'src/app/services/worker.service';
 })
 export class WorkerComponent implements OnInit {
 
-  workers : Worker
+  workerCreationDto : WorkerCreationDto
+  workers : WorkerModel
   workersDto : WorkerDto[] = []
+  users: User[] = []
   departmentTypes : DepartmentType[] = []
   dataLoaded = false;
   filterText = "";
@@ -28,6 +33,7 @@ export class WorkerComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private modalService: BsModalService,
     private departmentTypeService: DepartmentTypeService,
+    private userService: UserService,
     private toastrService: ToastrService,
     private router: Router) { }
 
@@ -39,12 +45,16 @@ export class WorkerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getUsers();
     this.getWorkers();
+    this.getDepartmentTypes();
     this.createWorkerForm();
   }
 
   createWorkerForm() {
     this.workerForm = this.formBuilder.group({
+      departmentTypeID:[[], Validators.required],
+      userID:['', Validators.required],
       workerName:['', Validators.required],
       workerSurname:['', Validators.required],
       DailyWorkingTime:['', Validators.required],
@@ -60,17 +70,34 @@ export class WorkerComponent implements OnInit {
     })
   }
 
+  getUsers(){
+    this.userService.getalluserbystatustrue().subscribe((response) => {
+      this.users = response.data
+      
+      this.dataLoaded = true
+    })
+  }
+
   getDepartmentTypes(){
     this.departmentTypeService.getAll().subscribe((response) => {
       this.departmentTypes = response.data
+      
       this.dataLoaded = true
     })
   }
 
   addWorker(){
+    console.log(this.workerForm.value.departmentTypeID)
     if(this.workerForm.valid){
-      let workerModel = Object.assign({}, this.workerForm.value);
-      this.workerService.add(workerModel).subscribe((response) => {
+      this.workerForm.value.userID = Number(this.workerForm.value.userID)      
+      // for (let index = 0; index < this.workerForm.value.departmentTypeID.length; index++) {
+      //   this.workerForm.value.departmentTypeID[index] = Number(this.workerForm.value.departmentTypeID[index])        
+      // }
+      
+      this.workerForm.value.DailyWorkingTime = Number(this.workerForm.value.DailyWorkingTime)
+      console.log(this.workerForm.value)
+      this.workerCreationDto = Object.assign({}, this.workerForm.value);
+      this.workerService.add(this.workerCreationDto).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
         this.router.navigate(['worker']);
       },
@@ -86,7 +113,7 @@ export class WorkerComponent implements OnInit {
     }
   }
 
-  deleteWorker(worker:Worker){
+  deleteWorker(worker:WorkerModel){
     this.workerService.delete(worker).subscribe((response => {
       this.toastrService.success(response.message);
       this.router.navigate(['worker']);

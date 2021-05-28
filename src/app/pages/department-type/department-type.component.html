@@ -24,10 +24,10 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let dep of departmentTypeName">
-                <td>{{ dep.deoartmentTypeName }}</td>
+              <tr *ngFor="let dep of departmentTypes">
+                <td>{{ dep.departmentTypeName }}</td>
                 <td>
-                    <button (click)="openModal(templateupdate)" class="btn btn-primary">Update</button>
+                    <button (click)="openModal(templateupdate, dep)" class="btn btn-primary">Update</button>
                 </td>                   
               </tr>     
             </tbody>
@@ -40,7 +40,7 @@
 
 <ng-template #templateadd>
   <div class="modal-header">
-    <h4 class="modal-title pull-left">Add Departmetnt Type</h4>
+    <h4 class="modal-title pull-left">Add Department Type</h4>
     <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -68,8 +68,8 @@
   <div class="modal-body">
     <form [formGroup]="departmentTypeForm">
         <div class="mb-3">
-            <label>Departmetn Type Name</label>
-            <input [(ngModel)]="departmentTypes.departmentTypeName" disabled="true" type="text" formControlName="DepartmentTypeName" class="form-control">
+            <label>Department Type Name</label>
+            <input [(ngModel)]="department.departmentTypeName" type="text" formControlName="DepartmentTypeName" class="form-control">
         </div>
         <div class="mb-3">
             <input type="submit" (click)="updateDepartmentTypes()" class="btn btn-primary" placeholder="Submit">

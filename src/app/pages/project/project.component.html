@@ -1,8 +1,6 @@
 <div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
 </div>
-<!-- Page content -->
 <div class="container-fluid mt--7">
-  <!-- Dark table -->
   <div class="row mt-3">
     <div class="col">
       <div class="card bg-default shadow">
@@ -14,7 +12,7 @@
                 <input class="form-control" [(ngModel)]="filterText" id="filterText" type="text" placeholder="Search worker compensations">
             </div>
             <div class="card-header bg-transparent border-0 container" >
-              <button (click)="openModal(templateadd)" class="btn btn-primary">Create</button>
+              <button class="btn btn-primary">Create</button>
             </div>
         </div>
         
@@ -29,7 +27,63 @@
                 <th scope="col">Max Worker Count</th>
                 <th scope="col">Active Worker Count</th>
                 <th scope="col">Total Declared Time</th>
-                <th scope="col">Rem. Project Time</th>,
+                <th scope="col">Rem. Project Time</th>
+                <th scope="col">Manager Name</th>
+                <th scope="col">Manager Surname</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let project of projectDetailDto">
+                <td>{{ project.projectName }}</td>
+                <td>{{ project.subject }}</td>
+                <td>{{ project.projectBudget }} </td>
+                <td>{{ project.minWorkerCount}}</td>
+                <td>{{ project.maxWorkerCount }}</td>
+                <td>{{ project.activeWorkerCount }}</td>
+                <td>{{ project.totalDeclaredTime}}</td>
+                <td>{{ project.remainingProjectTime }}  </td>
+                <td>{{ project.name}}</td>
+                <td>{{ project.surname}}</td>
+                <td>
+                  <a routerLink="/project-details/{{project.projectID}}"><button class="btn btn-warning">Details</button></a>
+                  <a><button (click)="deleteProject(project.projectID)" class="btn btn-danger">Delete</button></a>
+                  <button (click)="openModalForUpdateProject(templateupdateproject,project)" class="btn btn-primary">Update</button>
+                </td>                   
+              </tr>     
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col">
+      <div class="card bg-default shadow">
+        <div class="container" style="display: flex; flex-direction: row; align-items: flex-start;">
+            <div class="card-header bg-transparent border-0">
+                <h3 class="text-white mb-0">All Project Sections</h3>
+            </div>
+            <div class="card-header bg-transparent border-0 container">
+                <input class="form-control" [(ngModel)]="filterText" id="filterText" type="text" placeholder="Search worker compensations">
+            </div>
+            <div class="card-header bg-transparent border-0 container" >
+              <button (click)="openModal(templateaddprojectsection)" class="btn btn-primary">Create</button>
+            </div>
+        </div>
+        
+        <div class="table-responsive">
+          <table class="table align-items-center table-dark table-flush">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Project Name</th>
+                <th scope="col">Subject</th>
+                <th scope="col">Budget</th>
+                <th scope="col">Min Worker Count</th>
+                <th scope="col">Max Worker Count</th>
+                <th scope="col">Active Worker Count</th>
+                <th scope="col">Total Declared Time</th>
+                <th scope="col">Rem. Project Time</th>
                 <th scope="col">Manager Name</th>
                 <th scope="col">Manager Surname</th>
                 <th scope="col"></th>
@@ -42,13 +96,105 @@
                 <td>{{ project.projectBudget }} </td>
                 <td>{{ project.minWorkerCount}}</td>
                 <td>{{ project.maxWorkerCount }}</td>
-                <td>{{ project.activeWorkerCount | currency  }}</td>
+                <td>{{ project.activeWorkerCount }}</td>
                 <td>{{ project.totalDeclaredTime }}</td>
                 <td>{{ project.remainingProjectTime }}  </td>
                 <td>{{ project.name}}</td>
                 <td>{{ project.surname}}</td>
                 <td>
-                    <button (click)="openModal(templateupdate,compensation)" class="btn btn-primary">Update</button>
+                    <button (click)="openModal(templateupdateprojectsection,projectSection)" class="btn btn-primary">Update</button>
+                </td>                   
+              </tr>     
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row mt-3">
+    <div class="col">
+      <div class="card bg-default shadow">
+        <div class="container" style="display: flex; flex-direction: row; align-items: flex-start;">
+            <div class="card-header bg-transparent border-0">
+                <h3 class="text-white mb-0">All Project Section Departments</h3>
+            </div>
+            <div class="card-header bg-transparent border-0 container">
+                <input class="form-control" [(ngModel)]="filterText" id="filterText" type="text" placeholder="Search project section department">
+            </div>
+            <div class="card-header bg-transparent border-0 container" >
+              <button (click)="openModal(templateaddprojectsectiondepartment)" class="btn btn-primary">Create</button>
+            </div>
+        </div>
+        
+        <div class="table-responsive">
+          <table class="table align-items-center table-dark table-flush">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Project Section Name</th>
+                <th scope="col">Department Type Name</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let psd of projectSectionDepartmentDto | filterPipe : filterText">
+                <td>{{ psd.projectSectionDepartmentName }}</td>
+                <td>{{ project.departmentTypeName }}</td>
+                <td>
+                    <button (click)="deleteProjectSectionDepartment(projectSectionDepartment)" class="btn btn-danger">Delete</button>
+                    <button (click)="openModal(templateupdateprojectsectiondepartment,projectSectionDep)" class="btn btn-primary">Update</button>
+                </td>                   
+              </tr>     
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row mt-3">
+    <div class="col">
+      <div class="card bg-default shadow">
+        <div class="container" style="display: flex; flex-direction: row; align-items: flex-start;">
+            <div class="card-header bg-transparent border-0">
+                <h3 class="text-white mb-0">All Project Workers</h3>
+            </div>
+            <div class="card-header bg-transparent border-0 container">
+                <input class="form-control" [(ngModel)]="filterText" id="filterText" type="text" placeholder="Search project workers">
+            </div>
+            <div class="card-header bg-transparent border-0 container" >
+              <button (click)="openModal(templateaddprojectworker)" class="btn btn-primary">Create</button>
+            </div>
+        </div>
+        
+        <div class="table-responsive">
+          <table class="table align-items-center table-dark table-flush">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Project Name</th>
+                <th scope="col">Manager Name</th>
+                <th scope="col">Manager Surname</th>
+                <th scope="col">Project Section Name</th>
+                <th scope="col">Department Type Name</th>
+                <th scope="col">Worker Name</th>
+                <th scope="col">Worker Surname</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let pw of projectWorkerGeneralDto | filterPipe : filterText">
+                <td>{{ pw.projectName }}</td>
+                <td>{{ pw.name }}</td>
+                <td>{{ pw.surname }} </td>
+                <td>{{ pw.projectSectionName}}</td>
+                <td>{{ pw.departmentTypeName }}</td>
+                <td>{{ pw.workerName | currency  }}</td>
+                <td>{{ pw.workerSurname }}</td>
+                <td>
+                    <button (click)="deleteProjectWorker(projectWorker)" class="btn btn-danger">Delete</button>
+                    <button (click)="openModal(templateupdateprojectworker,projectworker)" class="btn btn-primary">Update</button>
                 </td>                   
               </tr>     
             </tbody>
@@ -59,38 +205,135 @@
   </div>
 </div>
 
-<ng-template #templateadd>
+<ng-template #templateaddproject>
   <div class="modal-header">
-    <h4 class="modal-title pull-left">Add Compensations</h4>
+    <h4 class="modal-title pull-left">Add Project</h4>
     <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    <form [formGroup]="compensationForm">
+    <form [formGroup]="projectForm" (ngSubmit)="Submit()">
         <div class="mb-3">
-            <label >Worker</label>
-            <input type="text" formControlName="WorkerID" class="form-control" placeholder="Enter the worker name">
+          <label >Project Name</label>
+          <input type="text" formControlName="ProjectName" class="form-control" placeholder="Enter the project name">
         </div>
         <div class="mb-3">
-          <label >User</label>
-          <input type="text" formControlName="UserID" class="form-control" placeholder="Enter the hr name">
+          <label>Subject</label>
+          <input type="text" formControlName="Subject" class="form-control" placeholder="Enter the subject amount">
+        </div> 
+        <div class="mb-3">
+          <label >Project Budget</label>
+          <input type="number" formControlName="ProjectBudget" class="form-control" placeholder="Enter the project budget">
         </div>
         <div class="mb-3">
-          <label>Compensation Amount</label>
-          <input type="text" formControlName="CompensationAmount" class="form-control" placeholder="Enter the compensation amount">
+          <label>Mininum Worker Count</label>
+          <input type="number" formControlName="MinWorkerCount" class="form-control" placeholder="Enter the minimum worker count">
         </div>
         <div class="mb-3">
-            <input type="submit" (click)="addWorker()" class="btn btn-primary" placeholder="Submit">
+          <label >Maximum Worker Count</label>
+          <input type="number" formControlName="MaxWorkerCount" class="form-control" placeholder="Enter the maximum worker count">
         </div>
-        
+        <div class="mb-3">
+          <label>Total Declared Time</label>
+          <input type="number" formControlName="TotalDeclaredTime" class="form-control" placeholder="Enter the total declared time">
+        </div>
+        <div class="mb-3">
+            <input type="submit" (click)="openModalProject(templateaddprojectsection)" class="btn btn-primary" placeholder="Submit">
+        </div>        
     </form>
 </div>
 </ng-template>
 
-<ng-template #templateupdate>
+<ng-template #templateupdateproject>
   <div class="modal-header">
-    <h4 class="modal-title pull-left">Update Compensations</h4>
+    <h4 class="modal-title pull-left">Update Project</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="projectForm" (ngSubmit)="Submit()">
+      <div style="visibility: false;" class="mb-3">
+        <label style="visibility: false;" >ID</label>
+        <input style="visibility: false;" [(ngModel)]="projectForUpdate.projectID" type="number" formControlName="ProjectID" class="form-control" placeholder="Enter the project name">
+      </div>
+      <div class="mb-3">
+        <label >Project Name</label>
+        <input [(ngModel)]="projectForUpdate.projectName" type="text" formControlName="ProjectName" class="form-control" placeholder="Enter the project name">
+      </div>
+      <div class="mb-3">
+        <label>Subject</label>
+        <input [(ngModel)]="projectForUpdate.subject" type="text" formControlName="Subject" class="form-control" placeholder="Enter the subject amount">
+      </div> 
+      <div class="mb-3">
+        <label >Project Budget</label>
+        <input [(ngModel)]="projectForUpdate.projectBudget" type="number" formControlName="ProjectBudget" class="form-control" placeholder="Enter the project budget">
+      </div>
+      <div class="mb-3">
+        <label>Mininum Worker Count</label>
+        <input [(ngModel)]="projectForUpdate.minWorkerCount" type="number" formControlName="MinWorkerCount" class="form-control" placeholder="Enter the minimum worker count">
+      </div>
+      <div class="mb-3">
+        <label >Maximum Worker Count</label>
+        <input [(ngModel)]="projectForUpdate.maxWorkerCount" type="number" formControlName="MaxWorkerCount" class="form-control" placeholder="Enter the maximum worker count">
+      </div>
+      <div class="mb-3">
+        <label>Total Declared Time</label>
+        <input [(ngModel)]="projectForUpdate.totalDeclaredTime" type="number" formControlName="TotalDeclaredTime" class="form-control" placeholder="Enter the total declared time">
+      </div>
+      <div class="mb-3">
+          <input type="submit" (click)="updateProject()" class="btn btn-primary" placeholder="Submit">
+      </div>        
+  </form>
+</div>
+</ng-template>
+
+<ng-template #templateaddprojectsection>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Add Project Section</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="IncrementalForm" (ngSubmit)="submit()">
+      <div formArrayName="items" *ngFor="let item of IncrementalForm.controls['items'].controls; let i = index">
+        <div [formGroupName]="i" class="mb-3">
+          <div class="mb-3">
+            <label>Write Section Name</label>
+            <input class="form-control" type="text" formControlName='ProjectSectionName' placeholder="Project Section Name">
+          </div>
+          <div class="mb-3">
+            <label>Write Section Time</label>
+            <input class="form-control" type="number" formControlName='SectionProjectTime' placeholder="Section Project Time">
+          </div>
+          <div class="mb-3" style="text-align: center;">
+            <button class="btn btn-danger" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+              Add Departments
+            </button>
+            <div class="collapse" id="collapseExample">
+              <div class="card card-body">
+                <select multiple="true" class="form-control" formControlName="departmentTypeID">
+                  <option *ngFor="let dep of departmentTypes" [value]="dep.departmentTypeID">{{ dep.departmentTypeName }}</option>
+                </select>
+                <button class="btn btn-warning" (click)="addProjectSection()">Add</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>   
+      <div class="row" class="mb-3">
+        <button class="btn btn-primary" type="button" (click)="addNext()">Add New</button>
+        <button class="btn btn-primary" type="button" (click)="addProject()">Create Project</button>
+      </div>
+    </form>
+</div>
+</ng-template>
+
+<ng-template #templateupdateprojectsection>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Update Project Section</h4>
     <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -125,5 +368,118 @@
 </div>
 </ng-template>
 
+<ng-template #templateaddprojectsectiondepartment>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Add Project Section Department</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="compensationForm">
+        <div class="mb-3">
+            <label >Worker</label>
+            <input type="text" formControlName="WorkerID" class="form-control" placeholder="Enter the worker name">
+        </div>
+        <div class="mb-3">
+          <label >User</label>
+          <input type="text" formControlName="UserID" class="form-control" placeholder="Enter the hr name">
+        </div>
+        <div class="mb-3">
+          <label>Compensation Amount</label>
+          <input type="text" formControlName="CompensationAmount" class="form-control" placeholder="Enter the compensation amount">
+        </div>
+        <div class="mb-3">
+            <input type="submit" (click)="addWorker()" class="btn btn-primary" placeholder="Submit">
+        </div>
+        
+    </form>
+</div>
+</ng-template>
 
+<ng-template #templateupdateprojectsectiondepartment>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Update Project Section Department</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="compensationUpdateForm">
+        <div class="mb-3">
+            <label>Worker Name</label>
+            <input [(ngModel)]="compensationDto.workerName" disabled="true" type="text" formControlName="WorkerName" class="form-control">
+        </div>
+        <div class="mb-3">
+          <label>Worker Surname</label>
+          <input [(ngModel)]="compensationDto.workerSurname" disabled="true" type="text" formControlName="WorkerSurname"class="form-control">
+      </div>
+        <div class="mb-3">
+          <label>HR Name</label>
+          <input [(ngModel)]="compensationDto.name" disabled="true" type="text" formControlName="UserName" class="form-control">
+        </div>
+        <div class="mb-3">
+          <label>HR Surname</label>
+          <input [(ngModel)]="compensationDto.surname" disabled="true" type="text" formControlName="UserSurname" class="form-control">
+        </div>
+        <div class="mb-3">
+          <label>Compensation Amount</label>
+          <input [(ngModel)]="compensationDto.compensationAmount" id="compensationAmount" type="text" formControlName="CompensationAmount" class="form-control" placeholder="Enter the compensation amount">
+        </div>
+        <div class="mb-3">
+            <input type="submit" (click)="updateCompensation()" class="btn btn-primary" placeholder="Submit">
+        </div>
+        
+    </form>
+</div>
+</ng-template>
 
+<ng-template #templateaddprojectworker>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Add Project Worker</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="projectWorkerForm">
+        <div class="mb-3">
+            <label >Project</label>
+            <input type="text" formControlName="project" class="form-control" placeholder="Select project">
+        </div>
+        <div class="mb-3">
+          <label >Worker</label>
+          <input type="text" formControlName="projectWorker" class="form-control" placeholder="Select worker">
+        </div>
+        <div class="mb-3">
+            <input type="submit" (click)="addProjectWorkers()" class="btn btn-primary" placeholder="Submit">
+        </div>
+        
+    </form>
+</div>
+</ng-template>
+
+<ng-template #templateupdateprojectworker>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Update Project Worker</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="projectWorkerForm">
+        <div class="mb-3">
+            <label>Project</label>
+            <input [(ngModel)]="compensationDto.workerName" disabled="true" type="text" formControlName="project" class="form-control">
+        </div>
+        <div class="mb-3">
+          <label>Worker</label>
+          <input [(ngModel)]="compensationDto.workerSurname" disabled="true" type="text" formControlName="projectWorker"class="form-control">
+        </div>
+        <div class="mb-3">
+            <input type="submit" (click)="updateProjectWorkers()" class="btn btn-primary" placeholder="Submit">
+        </div>
+        
+    </form>
+</div>
+</ng-template>

@@ -18,25 +18,25 @@ export class ProjectGeneralService {
   constructor(private httpClient:HttpClient) { }
 
   add(projectCreationDto:ProjectCreationDto): Observable<ResponseModel> {
-    return this.httpClient.post<ResponseModel>(this.apiUrl+"projectGeneral/add",projectCreationDto);
+    return this.httpClient.post<ResponseModel>(this.apiUrl+"projectgeneral/add",projectCreationDto);
   }
 
-  delete(project:Project): Observable<ResponseModel> {
-    return this.httpClient.post<ResponseModel>(this.apiUrl+"projectGeneral/delete",project);
+  delete(ProjectID:number): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(this.apiUrl+"projectgeneral/delete?projectID=",ProjectID);
   }
 
   update(project:Project): Observable<ResponseModel> {
-    return this.httpClient.post<ResponseModel>(this.apiUrl+"projectGeneral/delete",project);
+    return this.httpClient.post<ResponseModel>(this.apiUrl+"projectgeneral/update",project);
   }
   
   // ben burayı list döndürdüm ama hiç emin değilim.
   getProjectByProjectID(ProjectID:number): Observable<ListResponseModel<ProjectGeneralDto>>{
-    let newPath = this.apiUrl + "projectGeneral/getprojectbyprojectid?projectID="+ProjectID;
+    let newPath = this.apiUrl + "projectgeneral/getprojectbyprojectid?projectID="+ProjectID;
     return this.httpClient.get<ListResponseModel<ProjectGeneralDto>>(newPath);
   }
 
   getAll(): Observable<ListResponseModel<ProjectDetailDto>>{
-    let newPath = this.apiUrl + "projectGeneral/getall";
+    let newPath = this.apiUrl + "projectgeneral/getall";
     return this.httpClient.get<ListResponseModel<ProjectDetailDto>>(newPath);
   }
 }

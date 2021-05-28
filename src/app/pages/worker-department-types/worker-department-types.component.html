@@ -61,12 +61,16 @@
   <div class="modal-body">
     <form [formGroup]="workerDepartmentTypeForm">
         <div class="mb-3">
-            <label >Worker</label>
-            <input type="text" formControlName="WorkerID" class="form-control" placeholder="Enter the worker name">
+          <label >Worker</label>
+          <select formControlName="WorkerID" class="form-control">
+            <option *ngFor="let w of workers" [value]="w.workerID">{{w.workerName}} {{w.workerSurname }}</option> 
+          </select>
         </div>
         <div class="mb-3">
-          <label >Department</label>
-          <input type="text" formControlName="DepartmentTypeID" class="form-control" placeholder="Enter the department name">
+          <label >Worker</label>
+          <select formControlName="DepartmentTypeID" class="form-control">
+            <option *ngFor="let dep of departmentTypes" [value]="dep.departmentTypeID">{{dep.departmentTypeName}}</option> 
+          </select>
         </div>
         <div class="mb-3">
             <input type="submit" (click)="addWorkerToDepartment()" class="btn btn-primary" placeholder="Submit">

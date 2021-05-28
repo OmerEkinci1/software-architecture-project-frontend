@@ -1,0 +1,79 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+</div>
+<div class="container-fluid mt--7">
+  <div class="row mt-3">
+    <div class="col">
+        <div class="card bg-default shadow">
+            <div class="table-responsive">
+              <table class="table align-items-center table-dark table-flush">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">Project Name</th>
+                    <th scope="col">Subject</th>
+                    <th scope="col">Budget</th>
+                    <th scope="col">Min Worker Count</th>
+                    <th scope="col">Max Worker Count</th>
+                    <th scope="col">Active Worker Count</th>
+                    <th scope="col">Total Declared Time</th>
+                    <th scope="col">Rem. Project Time</th>
+                    <th scope="col">Manager Name</th>
+                    <th scope="col">Manager Surname</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr >
+                    <td>{{ projectDetailDto.projectName }}</td>
+                    <td>{{ projectDetailDto.subject }}</td>
+                    <td>{{ projectDetailDto.projectBudget }} </td>
+                    <td>{{ projectDetailDto.minWorkerCount}}</td>
+                    <td>{{ projectDetailDto.maxWorkerCount }}</td>
+                    <td>{{ projectDetailDto.activeWorkerCount }}</td>
+                    <td>{{ projectDetailDto.totalDeclaredTime}}</td>
+                    <td>{{ projectDetailDto.remainingProjectTime }}  </td>
+                    <td>{{ projectDetailDto.name}}</td>
+                    <td>{{ projectDetailDto.surname}}</td>             
+                  </tr>     
+                </tbody>
+              </table>
+            </div>
+          </div>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col">
+        <div class="card bg-default shadow">
+            <div class="table-responsive">
+                  <table class="table align-items-center table-dark table-flush">
+                      <thead class="thead-dark">
+                          <tr>
+                              <th scope="col">Project Section Name</th>                                
+                              <th scope="col">Section Project Time</th>
+                              <th scope="col">Remaining Section Time</th>
+                              <th scope="col">Worker Count</th>
+                              <th scope="col">Status</th>     
+                              <th scope="col">Department Types</th>                              
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr *ngFor="let project of projectKeepListDepartmentDto">
+                              <td>{{ project.projectSection.projectSectionName}}</td>
+                              <td>{{ project.projectSection.projectSectionName }}</td>
+                              <td>{{ project.projectSection.remainingSectionTime }} </td>
+                              <td>{{ project.projectSection.workerCount}}</td>
+                              <td>{{ project.projectSection.status}}</td>
+                              <td>
+                                  <table>
+                                      <tr *ngFor="let psd of project.projectSectionDepartmentDtos">
+                                          <td>{{ psd.departmentTypeName }}</td> 
+                                      </tr>
+                                  </table>
+                              </td>
+                              <td>{{ project.maxWorkerCount }}</td>           
+                          </tr>     
+                      </tbody>
+                  </table>
+            </div>
+    </div>
+    </div>
+  </div>
+</div>

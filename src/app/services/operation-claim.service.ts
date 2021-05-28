@@ -14,19 +14,19 @@ export class OperationClaimService {
   constructor(private httpClient:HttpClient) { }
 
   add(operationClaim:OperationClaim): Observable<ResponseModel> {
-    return this.httpClient.post<ResponseModel>(this.apiUrl+"operationClaims/add",operationClaim);
+    return this.httpClient.post<ResponseModel>(this.apiUrl+"operationclaims/add",operationClaim);
   }
 
   delete(operationClaim:OperationClaim): Observable<ResponseModel> {
-    return this.httpClient.post<ResponseModel>(this.apiUrl+"operationClaims/delete",operationClaim);
+    return this.httpClient.post<ResponseModel>(this.apiUrl+"operationclaims/delete",operationClaim);
   }
 
   update(operationClaim:OperationClaim): Observable<ResponseModel> {
-    return this.httpClient.post<ResponseModel>(this.apiUrl+"operationClaims/update",operationClaim);
+    return this.httpClient.post<ResponseModel>(this.apiUrl+"operationclaims/update",operationClaim);
   }
 
   getAll(): Observable<ListResponseModel<OperationClaim>>{
-    let newPath = this.apiUrl + "operationClaims/getall=";
+    let newPath = this.apiUrl + "operationclaims/getall";
     return this.httpClient.get<ListResponseModel<OperationClaim>>(newPath);
   }
 }

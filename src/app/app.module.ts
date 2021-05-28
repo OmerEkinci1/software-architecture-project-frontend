@@ -1,4 +1,3 @@
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -14,6 +13,9 @@ import {ToastrModule} from "ngx-toastr";
 import { AppRoutingModule } from './app.routing';
 import { ComponentsModule } from './components/components.module';
 import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
+import { ProjectDetailsComponent } from './pages/project-details/project-details.component';
+
 
 @NgModule({
   imports: [
@@ -32,6 +34,8 @@ import { BrowserModule } from '@angular/platform-browser';
     AppComponent,
     AdminLayoutComponent,
     AuthLayoutComponent,
+    
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

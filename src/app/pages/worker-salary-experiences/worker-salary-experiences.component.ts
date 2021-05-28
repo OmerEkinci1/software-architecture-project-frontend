@@ -3,8 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
+import { DepartmentType } from 'src/app/models/departmentTypes/departmentType';
 import { WorkerSalaryExperience } from 'src/app/models/workerSalaryExperiences/workerSalaryExperience';
 import { WorkerSalaryExperienceDto } from 'src/app/models/workerSalaryExperiences/workerSalaryExperienceDto';
+import { DepartmentTypeService } from 'src/app/services/department-type.service';
 import { WorkerSalaryExperienceService } from 'src/app/services/worker-salary-experience.service';
 
 @Component({
@@ -14,11 +16,14 @@ import { WorkerSalaryExperienceService } from 'src/app/services/worker-salary-ex
 })
 export class WorkerSalaryExperiencesComponent implements OnInit {
 
+  workerSalaryExperience
+  departmentTypes : DepartmentType[] = []
   workerSalaryExperiences : WorkerSalaryExperience[] = []
   workerSalaryExperienceDtos : WorkerSalaryExperienceDto[] = []
   dataLoaded = false
   constructor(
     private workerSalaryExperienceService : WorkerSalaryExperienceService,
+    private departmentTypeService: DepartmentTypeService,
     private toastrService : ToastrService,
     private formBuilder : FormBuilder,
     private modalService: BsModalService,
@@ -26,7 +31,8 @@ export class WorkerSalaryExperiencesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getProjects()
+    this.getDepartmentTypes()
+    this.getWorkerSalaryExperiences()
     this.createWorkerSalaryExperienceForm()
   }
 
@@ -37,16 +43,28 @@ export class WorkerSalaryExperiencesComponent implements OnInit {
     this.modalRef = this.modalService.show(template);
   }
 
+  // openModalUpdate(template: TemplateRef<any>, workerSalaryExperience : WorkerSalaryExperience){
+  //   this.workerSalaryExperience = new WorkerSalaryExperience(workerSalaryExperience)
+  //   this.modalRef = this.modalService.show(template);
+  // }
+
   createWorkerSalaryExperienceForm () {
     this.workerSalaryExperiencesForm = this.formBuilder.group({
-      DepartmentTypeName:['', Validators.required],
+      DepartmentTypeID:['', Validators.required],
       Year:['', Validators.required],
       minHourSalary:['', Validators.required],
       maxHourSalary:['',Validators.required],
     })
   }
 
-  getProjects(){
+  getDepartmentTypes(){
+    this.departmentTypeService.getAll().subscribe((response) => {
+      this.departmentTypes = response.data
+      this.dataLoaded = true
+    })
+  }
+
+  getWorkerSalaryExperiences(){
     this.workerSalaryExperienceService.getAll().subscribe((response) => {
       this.workerSalaryExperienceDtos = response.data
       console.log(response.data)
@@ -55,9 +73,16 @@ export class WorkerSalaryExperiencesComponent implements OnInit {
   }
 
   addWorkerSalaryExperiences (){
+    console.log("geldi")
     if(this.workerSalaryExperiencesForm.valid){
-      let workerSalaryExperienceModel = Object.assign({}, this.workerSalaryExperiencesForm.value);
-      this.workerSalaryExperienceService.add(workerSalaryExperienceModel).subscribe((response) => {
+      console.log("girdi")
+      this.workerSalaryExperience = new WorkerSalaryExperience(
+        Number(this.workerSalaryExperiencesForm.value.DepartmentTypeID),
+        Number(this.workerSalaryExperiencesForm.value.Year),
+        Number(this.workerSalaryExperiencesForm.value.minHourSalary),
+        Number(this.workerSalaryExperiencesForm.value.maxHourSalary))
+      console.log(this.workerSalaryExperience)
+      this.workerSalaryExperienceService.add(this.workerSalaryExperience).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
       },
       (responseError) => {

@@ -5,7 +5,11 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { Salary } from 'src/app/models/salaries/salary';
 import { WorkerSalaryDto } from 'src/app/models/salaries/workerSalaryDto';
+import { User } from 'src/app/models/users/user';
+import { WorkerModel } from 'src/app/models/workers/workerModel';
 import { SalaryService } from 'src/app/services/salary.service';
+import { UserService } from 'src/app/services/user.service';
+import { WorkerService } from 'src/app/services/worker.service';
 
 @Component({
   selector: 'app-salary',
@@ -14,15 +18,20 @@ import { SalaryService } from 'src/app/services/salary.service';
 })
 export class SalaryComponent implements OnInit {
 
-  salaries : Salary = {}
+  salaries
+  salaryAdd
   salary : Salary[] = []
   salaryDto : WorkerSalaryDto
+  users : User[] = []
+  worker : WorkerModel[] = []
   workerSalaryDto : WorkerSalaryDto[] = []
   dataLoaded = false
   modalRef : BsModalRef;
 
   constructor(
     private salaryService:SalaryService,
+    private userService: UserService,
+    private workerService: WorkerService,
     private formBuilder:FormBuilder,
     private toastrService:ToastrService,
     private modalService: BsModalService,
@@ -30,6 +39,11 @@ export class SalaryComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.getUserByStatusTrue()
+    this.getWorkerByStatusFalse()
+    this.getSalaries()
+    this.createSalaryForm()
+    this.createSalarynUpdateForm()
     this.activatedRoute.queryParams.subscribe((params) => {
       if(params['UserID'])
         this.getSalaryByUserID(params['UserID'])
@@ -42,11 +56,12 @@ export class SalaryComponent implements OnInit {
 
   openModal(template: TemplateRef<any>, salaryDto: WorkerSalaryDto){
     this.salaryDto = salaryDto
-    this.salaries.WorkerID = this.salaryDto.SalaryID  
-    this.salaries.WorkerID = this.salaryDto.WorkerID 
-    this.salaries.UserID = this.salaryDto.UserID 
-    this.salaries.SalaryDate = this.salaryDto.SalaryDate 
-    this.salaries.SalaryAmount = this.salaryDto.SalaryAmount 
+    this.salaries = new WorkerSalaryDto(salaryDto)
+    // this.salaries.WorkerID = this.salaryDto.SalaryID  
+    // this.salaries.WorkerID = this.salaryDto.WorkerID 
+    // this.salaries.UserID = this.salaryDto.UserID 
+    // this.salaries.SalaryDate = this.salaryDto.SalaryDate 
+    // this.salaries.SalaryAmount = this.salaryDto.SalaryAmount 
     this.modalRef = this.modalService.show(template)
   }
 
@@ -78,10 +93,24 @@ export class SalaryComponent implements OnInit {
     })
   }
 
+  getUserByStatusTrue(){
+    this.userService.getalluserbystatustrue().subscribe((response) => {
+      this.users = response.data
+      this.dataLoaded = true
+    })
+  }
+
+  getWorkerByStatusFalse(){
+    this.workerService.getallworkerstatusfalse().subscribe((response) => {
+      this.worker = response.data
+      this.dataLoaded = true
+    })
+  }
+
   addSalary(){
     if(this.salaryForm.valid){
-      let salaryModel = Object.assign({}, this.salaryForm.value);
-      this.salaryService.add(salaryModel).subscribe((response) => {
+      this.salaryAdd=new Salary(Number(this.salaryForm.value.UserID),Number(this.salaryForm.value.WorkerID),this.salaryForm.value.SalaryAmount)
+      this.salaryService.add(this.salaryAdd).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
       },
       (responseError) => {
@@ -98,8 +127,7 @@ export class SalaryComponent implements OnInit {
 
   updateSalary(){
     if(this.salaryForm.valid){
-      let salaryModel = Object.assign({}, this.salaryForm.value);
-      this.salaryService.update(salaryModel).subscribe((response) => {
+      this.salaryService.update(this.salaries).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
       },
       (responseError) => {

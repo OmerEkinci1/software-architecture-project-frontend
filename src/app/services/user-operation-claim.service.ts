@@ -27,7 +27,7 @@ export class UserOperationClaimService {
   }
 
   getAll(): Observable<ListResponseModel<UserOperationClaimDto>>{
-    let newPath = this.apiUrl + "userOpearionClaims/getall=";
+    let newPath = this.apiUrl + "useroperationclaims/getall";
     return this.httpClient.get<ListResponseModel<UserOperationClaimDto>>(newPath);
   }
 }

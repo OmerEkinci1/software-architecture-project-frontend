@@ -24,7 +24,7 @@ export class SalaryService {
   }
 
   getAll(): Observable<ListResponseModel<WorkerSalaryDto>>{
-    let newPath = this.apiUrl + "salaries/getall=";
+    let newPath = this.apiUrl + "salaries/getall";
     return this.httpClient.get<ListResponseModel<WorkerSalaryDto>>(newPath);
   }
 

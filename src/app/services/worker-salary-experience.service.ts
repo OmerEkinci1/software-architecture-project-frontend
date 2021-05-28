@@ -15,7 +15,7 @@ export class WorkerSalaryExperienceService {
   constructor(private httpClient:HttpClient) { }
 
   add(workerSalaryExperience:WorkerSalaryExperience): Observable<ResponseModel> {
-    return this.httpClient.post<ResponseModel>(this.apiUrl+"workerSalaryExperiences/add",workerSalaryExperience);
+    return this.httpClient.post<ResponseModel>(this.apiUrl+"workersalaryexperiences/add",workerSalaryExperience);
   }
 
   update(workerSalaryExperience:WorkerSalaryExperience): Observable<ResponseModel> {

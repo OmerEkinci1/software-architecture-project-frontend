@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { Compensation } from '../models/compensations/compensation';
 import { WorkerCompensationDto } from '../models/compensations/workerCompensationDto';
-import { Worker } from '../models/workers/worker';
+import { WorkerModel } from '../models/workers/workerModel';
 
 @Pipe({
   name: 'filterPipe'

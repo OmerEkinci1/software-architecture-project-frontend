@@ -1,4 +1,7 @@
-export interface Project{
+import { OnInit } from "@angular/core";
+import { ProjectDetailDto } from "./projectDetailDto";
+
+export class Project implements OnInit{
     ProjectID:number;
     UserID:number;
     ProjectName:string;
@@ -10,4 +13,12 @@ export interface Project{
     TotalDeclaredTime:number;
     RemainingProjectTime:number;
     Status:boolean;
+
+    constructor(projectDetailDto:ProjectDetailDto){
+        Object.assign(this,{projectDetailDto})
+    }
+
+    ngOnInit(): void {
+        throw new Error("Method not implemented.");
+    }
 }

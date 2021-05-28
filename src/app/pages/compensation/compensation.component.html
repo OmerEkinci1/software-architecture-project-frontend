@@ -14,7 +14,7 @@
                 <input class="form-control" [(ngModel)]="filterText" id="filterText" type="text" placeholder="Search worker compensations">
             </div>
             <div class="card-header bg-transparent border-0 container" >
-              <button (click)="openModal(templateadd)" class="btn btn-primary">Create</button>
+              <button (click)="openModalAdd(templateadd)" class="btn btn-primary">Create</button>
             </div>
         </div>
         
@@ -67,19 +67,23 @@
   <div class="modal-body">
     <form [formGroup]="compensationForm">
         <div class="mb-3">
-            <label >Worker</label>
-            <input type="text" formControlName="WorkerID" class="form-control" placeholder="Enter the worker name">
+          <label >Worker</label>
+          <select formControlName="WorkerID" class="form-control">
+            <option *ngFor="let com of worker" [value]="com.workerID">{{com.workerName}} {{com.workerSurname }}</option> 
+          </select>
         </div>
         <div class="mb-3">
           <label >User</label>
-          <input type="text" formControlName="UserID" class="form-control" placeholder="Enter the hr name">
+          <select formControlName="UserID" class="form-control">
+            <option *ngFor="let com of users" [value]="com.userID">{{com.name}} {{com.surname }}</option> 
+          </select>
         </div>
         <div class="mb-3">
           <label>Compensation Amount</label>
-          <input type="text" formControlName="CompensationAmount" class="form-control" placeholder="Enter the compensation amount">
+          <input type="number" formControlName="CompensationAmount" class="form-control" placeholder="Enter the compensation amount">
         </div>
         <div class="mb-3">
-            <input type="submit" (click)="addWorker()" class="btn btn-primary" placeholder="Submit">
+            <input type="submit" (click)="addCompensation()" class="btn btn-primary" placeholder="Submit">
         </div>
         
     </form>
@@ -97,23 +101,23 @@
     <form [formGroup]="compensationUpdateForm">
         <div class="mb-3">
             <label>Worker Name</label>
-            <input [(ngModel)]="compensationDto.workerName" disabled="true" type="text" formControlName="WorkerName" class="form-control">
+            <input [(ngModel)]="compensations.workerName" disabled="true" type="text" formControlName="WorkerName" class="form-control">
         </div>
         <div class="mb-3">
           <label>Worker Surname</label>
-          <input [(ngModel)]="compensationDto.workerSurname" disabled="true" type="text" formControlName="WorkerSurname"class="form-control">
+          <input [(ngModel)]="compensations.workerSurname" disabled="true" type="text" formControlName="WorkerSurname"class="form-control">
       </div>
         <div class="mb-3">
           <label>HR Name</label>
-          <input [(ngModel)]="compensationDto.name" disabled="true" type="text" formControlName="UserName" class="form-control">
+          <input [(ngModel)]="compensations.name" disabled="true" type="text" formControlName="UserName" class="form-control">
         </div>
         <div class="mb-3">
           <label>HR Surname</label>
-          <input [(ngModel)]="compensationDto.surname" disabled="true" type="text" formControlName="UserSurname" class="form-control">
+          <input [(ngModel)]="compensations.surname" disabled="true" type="text" formControlName="UserSurname" class="form-control">
         </div>
         <div class="mb-3">
           <label>Compensation Amount</label>
-          <input [(ngModel)]="compensationDto.compensationAmount" id="compensationAmount" type="text" formControlName="CompensationAmount" class="form-control" placeholder="Enter the compensation amount">
+          <input [(ngModel)]="compensations.compensationAmount" id="compensationAmount" type="number" formControlName="CompensationAmount" class="form-control" placeholder="Enter the compensation amount">
         </div>
         <div class="mb-3">
             <input type="submit" (click)="updateCompensation()" class="btn btn-primary" placeholder="Submit">

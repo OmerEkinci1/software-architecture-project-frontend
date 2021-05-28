@@ -30,13 +30,13 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let wse of workerSalaryExperienceDto | filterPipe : filterText">
+              <tr *ngFor="let wse of workerSalaryExperienceDtos | filterPipe : filterText">
                 <td>{{ wse.departmentTypeName }}</td>
                 <td>{{ wse.year }}</td>
                 <td>{{ wse.minHourSalary }} </td>
                 <td>{{ wse.maxHourSalary}}</td>
                 <td>
-                    <button (click)="openModal(templateupdate)" class="btn btn-primary">Update</button>
+                    <button (click)="openModalUpdate(templateupdate, workerSalaryExperience)" class="btn btn-primary">Update</button>
                 </td>                   
               </tr>     
             </tbody>
@@ -56,21 +56,23 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="workerSalaryExperiencesForm">
-        <div class="mb-3">
-            <label >Department Type Name</label>
-            <input type="text" formControlName="DepartmentTypeName" class="form-control" placeholder="Enter the department type name">
-        </div>
+      <div class="mb-3">
+        <label >Department Type Name</label>
+        <select formControlName="DepartmentTypeID" class="form-control">
+          <option *ngFor="let dep of departmentTypes" [value]="dep.departmentTypeID">{{dep.departmentTypeName}}</option> 
+        </select>
+      </div>
         <div class="mb-3">
           <label >Year</label>
-          <input type="text" formControlName="Year" class="form-control" placeholder="Enter the year">
+          <input type="number" formControlName="Year" class="form-control" placeholder="Enter the year">
         </div>
         <div class="mb-3">
           <label>Min Hour Salary</label>
-          <input type="text" formControlName="minHourSalary" class="form-control" placeholder="Enter the min hour salary">
+          <input type="number" formControlName="minHourSalary" class="form-control" placeholder="Enter the min hour salary">
         </div>
         <div class="mb-3">
             <label>Max Hour Salary</label>
-            <input type="text" formControlName="maxHourSalary" class="form-control" placeholder="Enter the max hour salary">
+            <input type="number" formControlName="maxHourSalary" class="form-control" placeholder="Enter the max hour salary">
           </div>
         <div class="mb-3">
             <input type="submit" (click)="addWorkerSalaryExperiences()" class="btn btn-primary" placeholder="Submit">
@@ -90,20 +92,22 @@
   <div class="modal-body">
     <form [formGroup]="workerSalaryExperiencesForm">
         <div class="mb-3">
-            <label>Department Type Name</label>
-            <input [(ngModel)]="workerSalaryExperienceDto.departmentTypeName" disabled="true" type="text" formControlName="DepartmentTypeName" class="form-control">
+          <label >Department Type Name</label>
+          <select formControlName="DepartmentTypeID" class="form-control">
+            <option *ngFor="let dep of departmentTypes" [value]="dep.departmentTypeID">{{dep.departmentTypeName}}</option> 
+          </select>
         </div>
         <div class="mb-3">
           <label>Year</label>
-          <input [(ngModel)]="workerSalaryExperienceDto.year" disabled="true" type="text" formControlName="Year"class="form-control">
+          <input [(ngModel)]="workerSalaryExperience.year" type="number" formControlName="Year"class="form-control">
       </div>
         <div class="mb-3">
           <label>Min Hour Salary</label>
-          <input [(ngModel)]="workerSalaryExperienceDto.minHourSalary" disabled="true" type="text" formControlName="minHourSalary" class="form-control">
+          <input [(ngModel)]="workerSalaryExperience.minHourSalary"type="number" formControlName="minHourSalary" class="form-control">
         </div>
         <div class="mb-3">
           <label>Max Hour Salary</label>
-          <input [(ngModel)]="workerSalaryExperienceDto.maxHourSalary" disabled="true" type="text" formControlName="maxHourSalary" class="form-control">
+          <input [(ngModel)]="workerSalaryExperience.maxHourSalary" type="number" formControlName="maxHourSalary" class="form-control">
         </div>
         <div class="mb-3">
             <input type="submit" (click)="updateWorkerSalaryExperiences()" class="btn btn-primary" placeholder="Submit">

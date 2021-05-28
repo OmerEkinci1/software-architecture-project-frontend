@@ -1,4 +1,7 @@
-export interface WorkerCompensationDto{
+import { OnInit } from "@angular/core"
+
+export class WorkerCompensationDto implements OnInit{
+    
     WorkerID:number
     WorkerName:string
     WorkerSurname:string
@@ -11,4 +14,15 @@ export interface WorkerCompensationDto{
     UserID:number
     Name:string
     Surname:string
+
+    constructor(params:WorkerCompensationDto){
+        Object.assign(this,params)
+
+    }
+
+    ngOnInit(): void {
+        
+    }
+
+
 }

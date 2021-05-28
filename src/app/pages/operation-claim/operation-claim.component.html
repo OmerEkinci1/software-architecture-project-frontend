@@ -26,12 +26,53 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let o of operationClaim | filterPipe : filterText">
-                <td>{{ o.operationClaimName }}</td>
+              <tr *ngFor="let oc of operationClaims | filterPipe : filterText">
+                <td>{{ oc.operationClaimName }}</td>
                 <td>
                     <div class="row">
-                        <button (click)="deleteWorker(worker)" class="btn btn-danger">Delete</button>
-                        <button (click)="openModal(templateUpdate)" class="btn btn-primary">Update</button>
+                        <button (click)="deleteOperationClaim(operationClaim)" class="btn btn-danger">Delete</button>
+                        <button (click)="openModalUpdate(templateUpdate, oc)" class="btn btn-primary">Update</button>
+                    </div>
+                </td>                 
+              </tr>     
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- USER OPERATİON CLAİM TABLE -->
+  <div class="row mt-5">
+    <div class="col">
+      <div class="card bg-default shadow">
+        <div class="container" style="display: flex; flex-direction: row; align-items: flex-start;">
+          <div class="card-header bg-transparent border-0" style="margin-right: 300px;">
+            <h3 class="text-white mb-0">All User Claims</h3>
+          </div>
+          <div class="card-header bg-transparent border-0 container" >
+            <button (click)="openModal(templateUAddUserOperationClaim)" class="btn btn-primary">Create</button>
+          </div>
+        </div> 
+        <div class="table-responsive">
+          <table class="table align-items-center table-dark table-flush">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">User Name</th>
+                <th scope="col">User Surname</th>
+                <th scope="col">Operation Claim Name</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of userOperationClaimDto">
+                <td>{{ user.userName }}</td>
+                <td>{{ user.userSurname }}</td>
+                <td>{{ user.operationClaimName }}</td>
+                <td>
+                    <div class="row">
+                        <button (click)="deleteUserOperationClaim(userOperationClaim)" class="btn btn-danger">Delete</button>
+                        <button (click)="openModalUpdateUserOperationClaim(templateUAddUserOperationClaim, user)" class="btn btn-primary">Update</button>
                     </div>
                 </td>                 
               </tr>     
@@ -53,8 +94,8 @@
   <div class="modal-body">
     <form [formGroup]="operationClaimForm">
         <div class="mb-3">
-            <label for="workerName">Operation Claim Name</label>
-            <input type="text" formControlName="operationClaimName" class="form-control" placeholder="Enter the claim name">
+            <label>Operation Claim Name</label>
+            <input type="text" formControlName="OperationClaimName" class="form-control" placeholder="Enter the claim name">
         </div>
         <div class="mb-3">
             <input type="submit" (click)="addOperationClaim()" class="btn btn-primary" placeholder="Submit">
@@ -73,8 +114,64 @@
   <div class="modal-body">
     <form [formGroup]="operationClaimForm">
         <div class="mb-3">
-            <label for="workerName">Operation Claim Name</label>
-            <input [value]="o.operationClaimName" [ngModel]="o.operationClaimID" type="text" formControlName="operationClaimName" class="form-control">
+            <label>Operation Claim Name</label>
+            <input [(ngModel)]="operationClaim.operationClaimName" type="text" formControlName="OperationClaimName" class="form-control">
+        </div>
+        <div class="mb-3">
+            <input type="submit" (click)="updateOperationClaim()" class="btn btn-primary" placeholder="Submit">
+        </div>
+    </form>
+</div>
+</ng-template>
+
+<ng-template #templateUAddUserOperationClaim>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Add User Operation Claim</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="userOperationClaimForm">
+        <div class="mb-3">
+          <label >User Informations</label>
+          <select formControlName="UserID" class="form-control">
+            <option *ngFor="let user of users" [value]="user.userID">{{user.name}} {{user.surname }}</option> 
+          </select>
+        </div>
+        <div class="mb-3">
+          <label >Operation Claims</label>
+          <select formControlName="OperationClaimID" class="form-control">
+            <option *ngFor="let oc of operationClaims" [value]="oc.operationClaimID">{{oc.operationClaimName}}</option> 
+          </select>
+        </div>
+        <div class="mb-3">
+            <input type="submit" (click)="addUserOperationClaim()" class="btn btn-primary" placeholder="Submit">
+        </div>
+    </form>
+</div>
+</ng-template>
+
+<ng-template #templateUpdateUserOperationClaim>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Update User Operation Claim</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="userOperationClaimForm">
+        <div class="mb-3">
+          <label >User Informations</label>
+          <select formControlName="UserID" class="form-control">
+            <option selected="true" *ngFor="let user of users" [value]="user.userID">{{user.name}} {{user.surname }}</option> 
+          </select>
+        </div>
+        <div class="mb-3">
+          <label >Operation Claims</label>
+          <select formControlName="OperationClaimID" class="form-control">
+            <option selected="true" *ngFor="let oc of operationClaims" [value]="oc.operationClaimID">{{oc.operationClaimName}}</option> 
+          </select>
         </div>
         <div class="mb-3">
             <input type="submit" (click)="updateOperationClaim()" class="btn btn-primary" placeholder="Submit">

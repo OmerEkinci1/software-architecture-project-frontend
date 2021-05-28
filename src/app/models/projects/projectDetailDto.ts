@@ -1,4 +1,6 @@
-export interface ProjectDetailDto{
+import { OnInit } from "@angular/core"
+
+export class ProjectDetailDto implements OnInit{
     ProjectID:number
     ProjectName:string
     Subject:string
@@ -12,4 +14,13 @@ export interface ProjectDetailDto{
     Name:string
     Surname:string
     Status:boolean
+
+    constructor(params){
+        Object.assign(this,{params})
+
+    }
+
+    ngOnInit(): void {
+        throw new Error("Method not implemented.")
+    }
 }

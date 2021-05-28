@@ -1,4 +1,6 @@
-export interface WorkerSalaryDto{
+import { OnInit } from "@angular/core";
+
+export class WorkerSalaryDto implements OnInit{   
     SalaryID:number
     SalaryAmount:number
     SalaryDate:Date
@@ -12,4 +14,12 @@ export interface WorkerSalaryDto{
     UserID:number
     Name:string
     Surname:string
+
+    constructor(params:WorkerSalaryDto){
+        Object.assign(this,params)
+    }
+
+    ngOnInit(): void {
+        throw new Error("Method not implemented.");
+    }
 }
