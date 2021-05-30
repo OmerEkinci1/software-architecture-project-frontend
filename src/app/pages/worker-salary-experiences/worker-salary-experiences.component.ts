@@ -17,6 +17,7 @@ import { WorkerSalaryExperienceService } from 'src/app/services/worker-salary-ex
 export class WorkerSalaryExperiencesComponent implements OnInit {
 
   workerSalaryExperience
+  addworkerSalaryExperience
   departmentTypes : DepartmentType[] = []
   workerSalaryExperiences : WorkerSalaryExperience[] = []
   workerSalaryExperienceDtos : WorkerSalaryExperienceDto[] = []
@@ -34,19 +35,24 @@ export class WorkerSalaryExperiencesComponent implements OnInit {
     this.getDepartmentTypes()
     this.getWorkerSalaryExperiences()
     this.createWorkerSalaryExperienceForm()
+    
   }
 
   workerSalaryExperiencesForm : FormGroup
+  workerSalaryExperiencesUpdateForm : FormGroup
   modalRef : BsModalRef;
 
   openModal(template: TemplateRef<any>){
     this.modalRef = this.modalService.show(template);
   }
 
-  // openModalUpdate(template: TemplateRef<any>, workerSalaryExperience : WorkerSalaryExperience){
-  //   this.workerSalaryExperience = new WorkerSalaryExperience(workerSalaryExperience)
-  //   this.modalRef = this.modalService.show(template);
-  // }
+  openModalUpdate(template: TemplateRef<any>, workerSalaryExperiences : WorkerSalaryExperienceDto){
+    this.workerSalaryExperience = new WorkerSalaryExperienceDto(workerSalaryExperiences["workerSalaryExperienceID"],workerSalaryExperiences["departmentTypeID"],workerSalaryExperiences["year"],workerSalaryExperiences.minHourSalary,workerSalaryExperiences.maxHourSalary)
+    this.createWorkerSalaryExperienceUpdateForm()
+    console.log("asdasd")
+    console.log(this.workerSalaryExperience)
+    this.modalRef = this.modalService.show(template);
+  }
 
   createWorkerSalaryExperienceForm () {
     this.workerSalaryExperiencesForm = this.formBuilder.group({
@@ -54,6 +60,15 @@ export class WorkerSalaryExperiencesComponent implements OnInit {
       Year:['', Validators.required],
       minHourSalary:['', Validators.required],
       maxHourSalary:['',Validators.required],
+    })
+  }
+
+  createWorkerSalaryExperienceUpdateForm () {
+    this.workerSalaryExperiencesUpdateForm = this.formBuilder.group({
+      DepartmentTypeID:[this.workerSalaryExperience["DepartmentTypeID"]?this.workerSalaryExperience["DepartmentTypeID"]:"", Validators.required],
+      Year:[this.workerSalaryExperience["Year"], Validators.required],
+      minHourSalary:[this.workerSalaryExperience["minHourSalary"]?this.workerSalaryExperience["minHourSalary"]:"", Validators.required],
+      maxHourSalary:[this.workerSalaryExperience["maxHourSalary"]?this.workerSalaryExperience["maxHourSalary"]:"",Validators.required],
     })
   }
 
@@ -76,39 +91,33 @@ export class WorkerSalaryExperiencesComponent implements OnInit {
     console.log("geldi")
     if(this.workerSalaryExperiencesForm.valid){
       console.log("girdi")
-      this.workerSalaryExperience = new WorkerSalaryExperience(
+      this.addworkerSalaryExperience = new WorkerSalaryExperience(
         Number(this.workerSalaryExperiencesForm.value.DepartmentTypeID),
         Number(this.workerSalaryExperiencesForm.value.Year),
         Number(this.workerSalaryExperiencesForm.value.minHourSalary),
         Number(this.workerSalaryExperiencesForm.value.maxHourSalary))
-      console.log(this.workerSalaryExperience)
-      this.workerSalaryExperienceService.add(this.workerSalaryExperience).subscribe((response) => {
+
+      this.workerSalaryExperienceService.add(this.addworkerSalaryExperience).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
-      },
-      (responseError) => {
-        if (responseError.error.Errors.length > 0) {
-          for (let index = 0; index < responseError.error.Errors.length; index++){
-            this.toastrService.error(responseError.error.Errors[index].ErrorMessage, "Verification Error");
-          }
-        }       
+        this.getWorkerSalaryExperiences()
+      },responseError=>{
+        this.toastrService.error(responseError.error.message)
       })
     } else {
       this.toastrService.error("Your form is missing", "Warning");
     }
   }
 
-  updateWorkerSalaryExperiences (){
-    if(this.workerSalaryExperiencesForm.valid){
-      let workerSalaryExperienceModel = Object.assign({}, this.workerSalaryExperiencesForm.value);
+  updateWorkerSalaryExperiences (){    
+    if(this.workerSalaryExperiencesUpdateForm.valid){
+      let workerSalaryExperienceModel = Object.assign({}, this.workerSalaryExperiencesUpdateForm.value);
+      workerSalaryExperienceModel.WorkerSalaryExperienceID=Number(this.workerSalaryExperience.WorkerSalaryExperienceID)
+      console.log(workerSalaryExperienceModel)
       this.workerSalaryExperienceService.update(workerSalaryExperienceModel).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
-      },
-      (responseError) => {
-        if (responseError.error.Errors.length > 0) {
-          for (let index = 0; index < responseError.error.Errors.length; index++){
-            this.toastrService.error(responseError.error.Errors[index].ErrorMessage, "Verification Error");
-          }
-        }       
+        this.getWorkerSalaryExperiences()
+      },responseError=>{
+        this.toastrService.error(responseError.error.message)
       })
     } else {
       this.toastrService.error("Your form is missing", "Warning");

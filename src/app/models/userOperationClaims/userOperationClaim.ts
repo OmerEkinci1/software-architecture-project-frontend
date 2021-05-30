@@ -5,8 +5,8 @@ export class UserOperationClaim implements OnInit{
     UserID:number;
     OperationClaimID:number;
 
-    constructor(UserID:number,OperationClaimID:number){
-        Object.assign(this,{UserID,OperationClaimID})
+    constructor(UserOperationClaimID:number,UserID:number,OperationClaimID:number){
+        Object.assign(this,{UserOperationClaimID,UserID,OperationClaimID})
 
     }
 

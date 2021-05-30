@@ -5,6 +5,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { DepartmentType } from 'src/app/models/departmentTypes/departmentType';
 import { DepartmentTypeService } from 'src/app/services/department-type.service';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-department-type',
@@ -60,8 +61,7 @@ export class DepartmentTypeComponent implements OnInit {
       console.log(departmentTypeModel)
       this.departmentTypeService.add(departmentTypeModel).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
-        this.router.navigate(['department-types']);
-        
+        this.getDepartmentTypes()
       },
       (responseError) => {
         if (responseError.error.Errors.length > 0) {
@@ -81,6 +81,7 @@ export class DepartmentTypeComponent implements OnInit {
       console.log(this.department)
       this.departmentTypeService.update(this.department).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
+        this.getDepartmentTypes()
       },
       (responseError) => {
         console.log(responseError.error.Errors)

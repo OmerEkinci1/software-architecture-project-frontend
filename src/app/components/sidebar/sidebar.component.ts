@@ -8,15 +8,15 @@ declare interface RouteInfo {
     class: string;
 }
 export const ROUTES: RouteInfo[] = [
-    { path: '/dashboard', title: 'Dashboard',  icon: 'ni-tv-2 text-primary', class: '' },
-    { path: '/compensations', title: 'Compensations',  icon: 'ni-tv-2 text-primary', class: '' },
-    { path: '/salary', title: 'Salary',  icon: 'ni-tv-2 text-primary', class: '' },
-    { path: '/department-types', title: 'Department Types',  icon:'ni-pin-3 text-orange', class: '' },
+    { path: '/dashboard', title: 'Dashboard',  icon: 'ni-chart-pie-35 text-primary', class: '' },
+    { path: '/compensations', title: 'Compensations',  icon: 'ni-paper-diploma text-primary', class: '' },
+    { path: '/salary', title: 'Salary',  icon: 'ni-satisfied text-primary', class: '' },
+    { path: '/department-types', title: 'Department Types',  icon:'ni-bold-right text-orange', class: '' },
     { path: '/operation-claim', title: 'Operation Claims',  icon:'ni-single-02 text-yellow', class: '' },
-    { path: '/project', title: 'Projects',  icon:'ni-bullet-list-67 text-red', class: '' },
+    { path: '/project', title: 'Projects',  icon:'ni-single-copy-04 text-red', class: '' },
     { path: '/project-worker', title: 'Project Workers',  icon:'ni-bullet-list-67 text-red', class: '' },
-    { path: '/project-worker-working-time', title: 'Project Worker Working Times',  icon:'ni-pin-3 text-orange', class: '' },
-    { path: '/worker', title: 'Workers',  icon:'ni-bullet-list-67 text-red', class: '' },
+    { path: '/project-worker-working-time', title: 'Project Worker Working Times',  icon:'ni-compass-04 text-orange', class: '' },
+    { path: '/worker', title: 'Workers',  icon:'ni-circle-08 text-red', class: '' },
     { path: '/worker-department-types', title: 'Worker Department Types',  icon:'ni-key-25 text-info', class: '' },
     { path: '/worker-salary-experiences', title: 'Worker Salary Experiences',  icon:'ni-circle-08 text-pink', class: '' },
 ];

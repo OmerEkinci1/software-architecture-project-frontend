@@ -18,8 +18,8 @@ export class ProjectWorkerService {
     return this.httpClient.post<ResponseModel>(this.apiUrl+"projectWorkers/add",projectWorker);
   }
 
-  delete(projectWorker:ProjectWorker): Observable<ResponseModel> {
-    return this.httpClient.post<ResponseModel>(this.apiUrl+"projectWorkers/delete",projectWorker);
+  delete(projectWorkerID:number): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(this.apiUrl + "projectWorkers/delete?projectWorkerID="+projectWorkerID,null);
   }
 
   update(projectWorker:ProjectWorker): Observable<ResponseModel> {

@@ -3,36 +3,35 @@
 <!-- Page content -->
 <div class="container-fluid mt--7">
   <!-- Dark table -->
-  <div class="row mt-5">
+  <div class="row">
     <div class="col">
       <div class="card bg-default shadow">
-        <div class="container" style="display: flex; flex-direction: row; align-items: flex-start;">
-          <div class="card-header bg-transparent border-0" style="margin-right: 300px;">
-            <h3 class="text-white mb-0">All Operation Claims</h3>
-          </div>
-          <div class="card-header bg-transparent border-0 container">
-            <input class="form-control" [(ngModel)]="filterText" id="filterText" type="text" placeholder="Search Operation Claims">
-          </div>
-          <div class="card-header bg-transparent border-0 container" >
-            <button (click)="openModal(template)" class="btn btn-primary">Create</button>
+        <div class="container">
+          <div class="row">
+            <div class="card-header bg-transparent border-0 col-sm" >
+              <h3 style="font-weight: bold;font-size: large; " class="text-white mb-0">All Operation Claims</h3>
+            </div>
+            <div class="card-header bg-transparent border-0 col-xl ">
+              <input class="form-control" [(ngModel)]="filterText" id="filterText" type="text" placeholder="Search Operation Claims">
+            </div>
+            <div  class="card-header bg-transparent border-0 col-sm">
+              <button (click)="openModal(template)" class="btn btn-primary">Create</button>
+            </div>
           </div>
         </div> 
         <div class="table-responsive">
           <table class="table align-items-center table-dark table-flush">
             <thead class="thead-dark">
               <tr>
-                <th scope="col">Operation Claim Name</th>
+                <th style="font-weight: bold;font-size: medium;" scope="col">Operation Claim Name</th>
                 <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let oc of operationClaims | filterPipe : filterText">
-                <td>{{ oc.operationClaimName }}</td>
-                <td>
-                    <div class="row">
-                        <button (click)="deleteOperationClaim(operationClaim)" class="btn btn-danger">Delete</button>
-                        <button (click)="openModalUpdate(templateUpdate, oc)" class="btn btn-primary">Update</button>
-                    </div>
+              <tr  *ngFor="let oc of operationClaims | filterPipe : filterText" >
+                <td style="font-size: large; font-weight: bold;">{{ oc.operationClaimName }}</td>
+                <td class="d-flex justify-content-end" >
+                    <button (click)="openModalUpdate(templateUpdate, oc)" class="btn btn-primary">Update</button>
                 </td>                 
               </tr>     
             </tbody>
@@ -46,34 +45,34 @@
   <div class="row mt-5">
     <div class="col">
       <div class="card bg-default shadow">
-        <div class="container" style="display: flex; flex-direction: row; align-items: flex-start;">
-          <div class="card-header bg-transparent border-0" style="margin-right: 300px;">
-            <h3 class="text-white mb-0">All User Claims</h3>
-          </div>
-          <div class="card-header bg-transparent border-0 container" >
-            <button (click)="openModal(templateUAddUserOperationClaim)" class="btn btn-primary">Create</button>
+        <div class="container">
+          <div class="row">
+            <div class="card-header bg-transparent border-0 ">
+              <h3 style="font-weight: bold;font-size: large; "  class="text-white mb-0">All User Claims</h3>
+            </div>
+            <div class="card-header bg-transparent border-0 container" >
+              <button (click)="openModal(templateUAddUserOperationClaim)" class="btn btn-primary">Create</button>
+            </div>
           </div>
         </div> 
         <div class="table-responsive">
           <table class="table align-items-center table-dark table-flush">
             <thead class="thead-dark">
               <tr>
-                <th scope="col">User Name</th>
-                <th scope="col">User Surname</th>
-                <th scope="col">Operation Claim Name</th>
-                <th scope="col"></th>
+                <th style="font-weight: bold;font-size: medium;" scope="col">User Name</th>
+                <th style="font-weight: bold;font-size: medium;" scope="col">User Surname</th>
+                <th style="font-weight: bold;font-size: medium;" scope="col">Operation Claim Name</th>
+                <th style="font-weight: bold;font-size: medium;" scope="col"></th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let user of userOperationClaimDto">
-                <td>{{ user.userName }}</td>
-                <td>{{ user.userSurname }}</td>
-                <td>{{ user.operationClaimName }}</td>
-                <td>
-                    <div class="row">
-                        <button (click)="deleteUserOperationClaim(userOperationClaim)" class="btn btn-danger">Delete</button>
-                        <button (click)="openModalUpdateUserOperationClaim(templateUAddUserOperationClaim, user)" class="btn btn-primary">Update</button>
-                    </div>
+                <td style="font-size: large; font-weight: bold;">{{ user.userName }}</td>
+                <td style="font-size: large; font-weight: bold;">{{ user.userSurname }}</td>
+                <td style="font-size: large; font-weight: bold;">{{ user.operationClaimName }}</td>
+                <td class="d-flex justify-content-end">
+                    <button (click)="deleteUserOperationClaim(user)" class="btn btn-danger">Delete</button>
+                    <button (click)="openModalUpdateUserOperationClaim(templateUpdateUserOperationClaim, user)" class="btn btn-primary">Update</button>
                 </td>                 
               </tr>     
             </tbody>
@@ -136,6 +135,7 @@
         <div class="mb-3">
           <label >User Informations</label>
           <select formControlName="UserID" class="form-control">
+            <option [value]="" disabled selected >Select User</option>
             <option *ngFor="let user of users" [value]="user.userID">{{user.name}} {{user.surname }}</option> 
           </select>
         </div>
@@ -160,21 +160,22 @@
     </button>
   </div>
   <div class="modal-body">
-    <form [formGroup]="userOperationClaimForm">
+    <form [formGroup]="userOperationClaimUpdateForm">
         <div class="mb-3">
           <label >User Informations</label>
-          <select formControlName="UserID" class="form-control">
-            <option selected="true" *ngFor="let user of users" [value]="user.userID">{{user.name}} {{user.surname }}</option> 
+          <select formControlName="UserID" class="form-control" >
+            <option [value]="" disabled selected >Select User</option>
+            <option *ngFor="let user of users" [value]="user.userID">{{user.name}} {{user.surname }}</option> 
           </select>
         </div>
         <div class="mb-3">
           <label >Operation Claims</label>
           <select formControlName="OperationClaimID" class="form-control">
-            <option selected="true" *ngFor="let oc of operationClaims" [value]="oc.operationClaimID">{{oc.operationClaimName}}</option> 
+            <option *ngFor="let oc of operationClaims" [value]="oc.operationClaimID">{{oc.operationClaimName}}</option> 
           </select>
         </div>
         <div class="mb-3">
-            <input type="submit" (click)="updateOperationClaim()" class="btn btn-primary" placeholder="Submit">
+            <input type="submit" (click)="updateUserOperationClaim()" class="btn btn-primary" placeholder="Submit">
         </div>
     </form>
 </div>

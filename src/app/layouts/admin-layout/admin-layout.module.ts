@@ -20,14 +20,14 @@ import { WorkerDepartmentTypesComponent } from 'src/app/pages/worker-department-
 import { WorkerSalaryExperiencesComponent } from 'src/app/pages/worker-salary-experiences/worker-salary-experiences.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { FilterPipePipe } from 'src/app/pipes/filter-pipe.pipe';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRippleModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { ProjectDetailsComponent } from 'src/app/pages/project-details/project-details.component';
 import { ProjectWorkerComponent } from 'src/app/pages/project-worker/project-worker.component';
-// import { ToastrModule } from 'ngx-toastr';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   imports: [
@@ -39,9 +39,7 @@ import { ProjectWorkerComponent } from 'src/app/pages/project-worker/project-wor
     HttpClientModule,
     NgbModule,
     ClipboardModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatRippleModule,
+    
   ],
   declarations: [
     DashboardComponent,

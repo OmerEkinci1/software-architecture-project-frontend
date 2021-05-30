@@ -16,20 +16,20 @@ export class ProjectWorkerWorkingTimeService {
   constructor(private httpClient:HttpClient) { }
 
   add(projectWorkerWorkingTime:ProjectWorkerWorkingTime): Observable<ResponseModel> {
-    return this.httpClient.post<ResponseModel>(this.apiUrl+"projectWorkerWokingTimes/add",projectWorkerWorkingTime);
+    return this.httpClient.post<ResponseModel>(this.apiUrl+"projectworkerworkingtimes/add",projectWorkerWorkingTime);
   }
 
   update(projectWorkerWorkingTime:ProjectWorkerWorkingTime): Observable<ResponseModel> {
-    return this.httpClient.post<ResponseModel>(this.apiUrl+"projectWorkerWokingTimes/update",projectWorkerWorkingTime);
+    return this.httpClient.post<ResponseModel>(this.apiUrl+"projectworkerworkingtimes/update",projectWorkerWorkingTime);
   }
 
   getAll(): Observable<ListResponseModel<ProjectWorkerWorkingTimeDto>>{
-    let newPath = this.apiUrl + "projectWorkerWokingTimes/getall=";
+    let newPath = this.apiUrl + "projectworkerworkingtimes/getall";
     return this.httpClient.get<ListResponseModel<ProjectWorkerWorkingTimeDto>>(newPath);
   }
 
   getByProjectWorkerID(projectWorkerID:number): Observable<ListResponseModel<ProjectWorkerWorkingTimeDto>>{
-    let newPath = this.apiUrl + "projectWorkerWokingTimes/getbyprojectworkerid?projectWorkerID="+projectWorkerID;
+    let newPath = this.apiUrl + "projectworkerworkingtimes/getbyprojectworkerid?projectWorkerID="+projectWorkerID;
     return this.httpClient.get<ListResponseModel<ProjectWorkerWorkingTimeDto>>(newPath);
   }
 }

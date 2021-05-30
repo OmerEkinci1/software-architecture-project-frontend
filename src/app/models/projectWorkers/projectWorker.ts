@@ -6,8 +6,13 @@ export class ProjectWorker implements OnInit{
     ProjectSectionDepartmentID:number;
     Status:boolean;
 
-    constructor(ProjectSectionDepartmentID:number,WorkerID:number){
-        Object.assign(this,{ProjectSectionDepartmentID,WorkerID})
+    // constructor(ProjectSectionDepartmentID:number,WorkerID:number){
+    //     Object.assign(this,{ProjectSectionDepartmentID,WorkerID})
+
+    // }
+
+    constructor(ProjectWorkerID:number,WorkerID:number,ProjectSectionDepartmentID:number,Status:boolean){
+        Object.assign(this,{ProjectWorkerID,WorkerID,ProjectSectionDepartmentID,Status})
 
     }
 

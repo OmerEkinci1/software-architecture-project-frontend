@@ -13,7 +13,7 @@
             <div class="card-header bg-transparent border-0 container">
                 <input class="form-control" [(ngModel)]="filterText" id="filterText" type="text" placeholder="Search worker compensations">
             </div>
-            <div class="card-header bg-transparent border-0 container" >
+            <div class="card-header bg-transparent border-0" >
               <button (click)="openModalAdd(templateadd)" class="btn btn-primary">Create</button>
             </div>
         </div>
@@ -55,6 +55,9 @@
       </div>
     </div>
   </div>
+  <div class="container" style="margin-top: 10px;">
+    <strong><a href="https://net-brut.com/kidem-ihbar-tazminati-hesaplama" target="_blank">Referans Tazminat Hesaplama Sitesi</a></strong>
+  </div>
 </div>
 
 <ng-template #templateadd>
@@ -69,12 +72,14 @@
         <div class="mb-3">
           <label >Worker</label>
           <select formControlName="WorkerID" class="form-control">
+            <option [value]="" disabled selected >Select Worker</option>
             <option *ngFor="let com of worker" [value]="com.workerID">{{com.workerName}} {{com.workerSurname }}</option> 
           </select>
         </div>
         <div class="mb-3">
           <label >User</label>
           <select formControlName="UserID" class="form-control">
+            <option [value]="" disabled selected >Select HR</option>
             <option *ngFor="let com of users" [value]="com.userID">{{com.name}} {{com.surname }}</option> 
           </select>
         </div>

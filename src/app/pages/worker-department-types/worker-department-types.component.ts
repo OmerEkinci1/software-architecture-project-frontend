@@ -19,7 +19,7 @@ import { WorkerService } from 'src/app/services/worker.service';
 })
 export class WorkerDepartmentTypesComponent implements OnInit {
 
-  workers : WorkerModel[] = []
+  workers :WorkerModel[]=[]
   departmentTypes : DepartmentType[] = []
   workerSalaryExperienceAdd
   workerDepartmentTypes : WorkerDepartmentType[] = []
@@ -65,6 +65,7 @@ export class WorkerDepartmentTypesComponent implements OnInit {
   getWorkerDepartments(){
     this.workerDepartmentTypeService.getAll().subscribe((response) => {
       this.workerDepartmentDto = response.data
+      console.log(this.workerDepartmentDto)
       this.dataLoaded = true
     })
   }
@@ -87,10 +88,11 @@ export class WorkerDepartmentTypesComponent implements OnInit {
     if(this.workerDepartmentTypeForm.valid){
       this.workerSalaryExperienceAdd = new WorkerDepartmentType(
         Number(this.workerDepartmentTypeForm.value.WorkerID),
-        Number(this.workerDepartmentTypeForm.value.WorkerID)
+        Number(this.workerDepartmentTypeForm.value.DepartmentTypeID)
       )
       this.workerDepartmentTypeService.add(this.workerSalaryExperienceAdd).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
+        this.getWorkerDepartments()
       },
       (responseError) => {
         if (responseError.error.Errors.length > 0) {
@@ -104,16 +106,20 @@ export class WorkerDepartmentTypesComponent implements OnInit {
     }
   }
 
-  deleteWorkerDepartmentType(workerDepartmentType:WorkerDepartmentType){
-    this.workerDepartmentTypeService.delete(workerDepartmentType).subscribe((response => {
-      this.toastrService.success(response.message);
-    }),errorResponse=>{
-      if (errorResponse.error.error.length>0){
-        for(let i=0; i < errorResponse.error.error.length; i++){
-          this.toastrService.error(errorResponse.error.error[i].ErrorMessage,"Verification Error");
-        }
-      }
-    })
+  deleteWorkerDepartmentType(workerDepartmentType:WorkerDepartmentDto){
+    //let workerDepartmentType=new WorkerDepartmentType(workerDepartmentType.WorkerID,workerDepartmentType.departmentType)
+
+
+    // this.workerDepartmentTypeService.delete(workerDepartmentType).subscribe((response => {
+    //   this.toastrService.success(response.message);
+    //   this.getWorkerDepartments()
+    // }),errorResponse=>{
+    //   if (errorResponse.error.error.length>0){
+    //     for(let i=0; i < errorResponse.error.error.length; i++){
+    //       this.toastrService.error(errorResponse.error.error[i].ErrorMessage,"Verification Error");
+    //     }
+    //   }
+    // })
   }
 
   getAllWorkersByDepartmentTypeID(DepartmentTypeID:number){

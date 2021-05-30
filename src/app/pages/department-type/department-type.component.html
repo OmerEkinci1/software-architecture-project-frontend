@@ -3,31 +3,33 @@
 <!-- Page content -->
 <div class="container-fluid mt--7">
   <!-- Dark table -->
-  <div class="row mt-3">
+  <div class="row">
     <div class="col">
       <div class="card bg-default shadow">
-        <div class="container" style="display: flex; flex-direction: row; align-items: flex-start;">
-            <div class="card-header bg-transparent border-0">
-                <h3 class="text-white mb-0">All Department Types</h3>
+        <div class="container" >
+          <div class="row">
+            <div class="card-header bg-transparent border-0 col-sm">
+                <h3 class="text-white mb-0" style="font-weight: bold;font-size: large;">All Department Types</h3>
             </div>
-            <div class="card-header bg-transparent border-0 container" >
-              <button (click)="openModal(templateadd)" class="btn btn-primary">Create</button>
+            <div class="card-header bg-transparent border-0 col-sm" >
+              <button style="font-size: large; font-weight: bold;" (click)="openModal(templateadd)" class="btn btn-primary">Create</button>
             </div>
+          </div>
         </div>
         
         <div class="table-responsive">
           <table class="table align-items-center table-dark table-flush">
             <thead class="thead-dark">
               <tr>
-                <th scope="col">Department Type Name</th>
-                <th scope="col"></th>
+                <th style="font-weight: bold;font-size: medium;" scope="col">Department Type Name</th>
+                <th style="font-weight: bold;font-size: medium;" scope="col"></th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let dep of departmentTypes">
-                <td>{{ dep.departmentTypeName }}</td>
-                <td>
-                    <button (click)="openModal(templateupdate, dep)" class="btn btn-primary">Update</button>
+                <td style="font-size: large; font-weight: bold;">{{ dep.departmentTypeName }}</td>
+                <td class="d-flex justify-content-end">
+                    <button (click)="openModal(templateupdate, dep)" class="btn btn-primary" style="font-size: large; font-weight: bold;">Update</button>
                 </td>                   
               </tr>     
             </tbody>
@@ -48,7 +50,7 @@
   <div class="modal-body">
     <form [formGroup]="departmentTypeForm">
         <div class="mb-3">
-            <label >Worker</label>
+            <label >Department Type Name</label>
             <input type="text" formControlName="DepartmentTypeName" class="form-control" placeholder="Enter the department Type name">
         </div>
         <div class="mb-3">

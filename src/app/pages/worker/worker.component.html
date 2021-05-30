@@ -3,31 +3,32 @@
 <!-- Page content -->
 <div class="container-fluid mt--7">
   <!-- Dark table -->
-  <div class="row mt-5">
+  <div class="row">
     <div class="col">
       <div class="card bg-default shadow">
-        <div class="container" style="display: flex; flex-direction: row; align-items: flex-start;">
-          <div class="card-header bg-transparent border-0" style="margin-right: 300px;">
-            <h3 class="text-white mb-0">All Workers</h3>
-          </div>
-          <div class="card-header bg-transparent border-0 container">
-            <input class="form-control" [(ngModel)]="filterText" id="filterText" type="text" placeholder="Search workers">
-          </div>
-          <div class="card-header bg-transparent border-0 container" >
-            <button (click)="openModal(template)" class="btn btn-primary">Create</button>
-          </div>
+        <div class="container">
+            <div class="card-header bg-transparent border-0" style="margin-right: 300px;">
+              <h3 class="text-white mb-0">All Workers</h3>
+            </div>
+            <div class="card-header bg-transparent border-0">
+              <input class="form-control" [(ngModel)]="filterText" id="filterText" type="text" placeholder="Search workers">
+            </div>
+            <div class="card-header bg-transparent border-0 " >
+              <button (click)="openModal(template)" class="btn btn-primary">Create</button>
+         </div>
         </div> 
         <div class="table-responsive">
           <table class="table align-items-center table-dark table-flush">
             <thead class="thead-dark">
               <tr>
-                <th scope="col">Worker Name</th>
-                <th scope="col">Worker Surname</th>
-                <th scope="col">Daily Working Time</th>
-                <th scope="col">Hour Salary</th>
-                <th scope="col">Start Time</th>
-                <th scope="col">Department Name</th>
-                <th scope="col"></th>
+                <th style="font-weight: bold;font-size: medium;" scope="col">Worker Name</th>
+                <th style="font-weight: bold;font-size: medium;" scope="col">Worker Surname</th>
+                <th style="font-weight: bold;font-size: medium;" scope="col">Daily Working Time</th>
+                <th style="font-weight: bold;font-size: medium;" scope="col">Hour Salary</th>
+                <th style="font-weight: bold;font-size: medium;" scope="col">Start Time</th>
+                <th style="font-weight: bold;font-size: medium;" scope="col">HR Name</th>
+                <th style="font-weight: bold;font-size: medium;" scope="col">Department Name</th>
+                <th style="font-weight: bold;font-size: medium;" scope="col"></th>
               </tr>
             </thead>
             <tbody>
@@ -37,18 +38,17 @@
                 <td>{{ worker.dailyWorkingTime }}  Hours</td>
                 <td>{{ worker.hourSalary | currency }}</td>
                 <td>{{ worker.startTime }}</td>  
+                <td>{{ worker.name }}</td> 
                 <td>
-                  <table>
-                      <tr *ngFor="let department of worker.departmentType">
+                  <table >
+                      <tr *ngFor="let department of worker.departmentTypes">
                           <td >{{ department.departmentTypeName }}</td>    
                       </tr>
                   </table>
                 </td>
-                <td>
-                    <div class="row">
-                        <button (click)="deleteWorker(worker)" class="btn btn-danger">Delete</button>
-                        <button (click)="openModal(templateupdate)" class="btn btn-primary">Update</button>
-                    </div>
+                <td >
+                    <button (click)="deleteWorker(worker)" class="btn btn-danger">Delete</button>
+                    <button (click)="openModalUpdate(templateupdate, worker)" class="btn btn-primary">Update</button>
                 </td>                 
               </tr>     
             </tbody>
@@ -70,8 +70,8 @@
     <form [formGroup]="workerForm">
         <div class="mb-3">
           <label for="workerName">Department Type Name</label>
-          <select multiple="true" class="form-control" formControlName="departmentTypeID">
-            <option *ngFor="let dep of departmentTypes" [value]="dep.departmentTypeID">{{ dep.departmentTypeName }}</option>
+          <select multiple="true" class="form-control" formControlName="DepartmentTypes">
+            <option *ngFor="let dep of departmentTypes" [value]="dep">{{ dep.departmentTypeName }}</option>
           </select>
         </div>
         <div class="mb-3">
@@ -111,33 +111,39 @@
     </button>
   </div>
   <div class="modal-body">
-    <form [formGroup]="operationClaimForm">
-        <div class="mb-3">
-          <label for="workerName">Department Type Name</label>
-          <select >
-            <option *ngFor="let dep of departmetnTypes">{{ dep.departmentTypeName }}</option>
-          </select>
-        </div>
-        <div class="mb-3">
-            <label for="workerName">Worker Name</label>
-            <input [value]="worker.workerName" [ngModel]="worker.workerID" type="text" formControlName="workerName" class="form-control" placeholder="Enter the worker name">
-        </div>
-        <div class="mb-3">
-          <label for="workerName">Worker Surname</label>
-          <input [value]="worker.workerSurname" [ngModel]="worker.workerID" type="text" formControlName="workerSurname" class="form-control" placeholder="Enter the worker surname">
-        </div>
-        <div class="mb-3">
-          <label for="workerName">Daily Working Time</label>
-          <input [value]="worker.dailyWorkingTime" [ngModel]="worker.workerID" type="text" formControlName="DailyWorkingTime" class="form-control" placeholder="Enter the daily working time">
-        </div>
-        <div class="mb-3">
-          <label for="workerName">Hour Salary</label>
-          <input [value]="worker.hourSalary" [ngModel]="worker.workerID" type="number" formControlName="HourSalary" class="form-control" placeholder="Enter the hour salary">
-        </div>
-        <div class="mb-3">
-            <input type="submit" (click)="addWorker()" class="btn btn-primary" placeholder="Submit">
-        </div>
-    </form>
+    <form [formGroup]="workerUpdateForm">
+      <div class="mb-3">
+        <label for="workerName">Department Type Name</label>
+        <select multiple="true" class="form-control" formControlName="DepartmentTypes">
+          <option *ngFor="let dep of departmentTypes" [value]="dep">{{ dep.departmentTypeName }}</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label >HR Name</label>
+        <select formControlName="userID" class="form-control">
+          <option *ngFor="let u of users" [value]="u.userID">{{u.name}} {{u.surname }}</option> 
+        </select>
+      </div>
+      <div class="mb-3">
+          <label for="workerName">Worker Name</label>
+          <input type="text" formControlName="workerName" class="form-control" placeholder="Enter the worker name">
+      </div>
+      <div class="mb-3">
+        <label for="workerName">Worker Surname</label>
+        <input type="text" formControlName="workerSurname" class="form-control" placeholder="Enter the worker surname">
+      </div>
+      <div class="mb-3">
+        <label for="workerName">Daily Working Time</label>
+        <input type="number" formControlName="DailyWorkingTime" class="form-control" placeholder="Enter the daily working time">
+      </div>
+      <div class="mb-3">
+        <label for="workerName">Hour Salary</label>
+        <input type="number" formControlName="HourSalary" class="form-control" placeholder="Enter the hour salary">
+      </div>
+      <div class="mb-3">
+          <input type="submit" (click)="updateWorker()" class="btn btn-primary" placeholder="Submit">
+      </div>
+  </form>
 </div>
 </ng-template>
 

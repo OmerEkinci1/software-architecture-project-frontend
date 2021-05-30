@@ -27,8 +27,6 @@ export class UserProfileComponent implements OnInit {
 
   ngOnInit() {
     this.getUsersByID();
-    this.createUserUpdateForm();
-
   }
 
   userUpdateForm : FormGroup
@@ -40,18 +38,19 @@ export class UserProfileComponent implements OnInit {
 
   createUserUpdateForm(){
     this.userUpdateForm = this.formBuilder.group({
-      Name:['', Validators.required],
-      Surname:['', Validators.required],
-      Email:['',Validators.required],
-      Password:['',Validators.required],
+      Name:[this.users["name"], Validators.required],
+      Surname:[this.users["surname"], Validators.required],
+      Email:[this.users["email"],Validators.required],
+      Password:["",Validators.required],
     })
   }
 
   getUsersByID(){
     let UserID = Number(localStorage.getItem("userID"))
     this.userService.get(UserID).subscribe((response) => {
+      console.log(response.data)      
       this.users = response.data
-      console.log(response.data)
+      this.createUserUpdateForm()      
       this.dataLoaded = true
     })
   }
@@ -60,6 +59,7 @@ export class UserProfileComponent implements OnInit {
     if(this.userUpdateForm.valid){
       let userModel = Object.assign({}, this.userUpdateForm.value);
       userModel.userID = Number(localStorage.getItem("userID"));
+      console.log(userModel)
       this.userService.update(userModel).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
         this.router.navigate(['']);
@@ -81,9 +81,11 @@ export class UserProfileComponent implements OnInit {
     localStorage.removeItem("token")
     localStorage.removeItem("expiration")
     localStorage.removeItem("userID")
+    localStorage.removeItem("email")
+    localStorage.removeItem("password")
     this.userService.delete(user).subscribe((response => {
       this.toastrService.success(response.message);
-      this.router.navigate(['']);
+      this.router.navigate(['login']);
     }),errorResponse=>{
       if (errorResponse.error.error.length>0){
         for(let i=0; i < errorResponse.error.error.length; i++){

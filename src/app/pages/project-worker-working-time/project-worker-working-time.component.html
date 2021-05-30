@@ -22,23 +22,27 @@
                 <th scope="col">Worker Name</th>
                 <th scope="col">Worker Surname</th>
                 <th scope="col">Daily Start Hour</th>
-                <th scope="col">Dialy Finish Hour</th>
-                <th scope="col">Project</th>
+                <th scope="col">Daily Finish Hour</th>
+                <th scope="col">Project Name</th>
                 <th scope="col">Project Section Name</th>
                 <th scope="col">Department Type Name</th>
                 <th scope="col">Date</th>
+                <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let pwdto of projectWorkerWorkingTimeDto | filterPipe : filterText">
+              <tr *ngFor="let pwdto of projectWorkerWorkingTimeDto">
+                <td>{{ pwdto.workerName }}</td>
+                <td>{{ pwdto.workerSurname }}</td>
+                <td>{{ pwdto.dailyStartHour }} </td>
+                <td>{{ pwdto.dailyFinishHour}}</td>
                 <td>{{ pwdto.projectName }}</td>
-                <td>{{ pwdto.subject }}</td>
-                <td>{{ pwdto.projectBudget }} </td>
-                <td>{{ pwdto.minWorkerCount}}</td>
-                <td>{{ pwdto.maxWorkerCount }}</td>
-                <td>{{ pwdto.activeWorkerCount }}</td>
-                <td>{{ pwdto.totalDeclaredTime }}</td>
-                <td>{{ pwdto.remainingProjectTime }}  </td>                  
+                <td>{{ pwdto.projectSectionName }}</td>
+                <td>{{ pwdto.departmentTypeName }}</td>
+                <td>{{ pwdto.date }}  </td>     
+                <td>
+                  <button (click)="openModal(templateupdate, pwdto)" class="btn btn-primary">Update</button>
+                </td>               
               </tr>     
             </tbody>
           </table>
@@ -47,6 +51,44 @@
     </div>
   </div>
 </div>
+
+<ng-template #templateupdate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Update Project Worker Working Time</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    
+    <form [formGroup]="projectWorkerWorkingTimeForm">
+        <div class="mb-3">
+          <label>Date</label>
+          <input formControlName="Date" type="text" [value]="projectWorkerWorkingTimeDtoSingle.date" disabled="true" class="form-control">
+        </div>
+        <div class="mb-3">
+          <label >Worker</label>
+          <select formControlName="ProjectWorkerID" class="form-control" disabled>            
+            <option [(ngModel)]="projectWorkerWorkingTimeDtoSingle.workerID">{{projectWorkerWorkingTimeDtoSingle.workerName}} {{projectWorkerWorkingTimeDtoSingle.workerSurname }}</option> 
+          </select>
+        </div>
+        <div class="mb-3">
+          <label>Daily Start Hour</label>
+          <input type="text" [(ngModel)]="projectWorkerWorkingTimeDtoSingle.dailyStartHour" formControlName="DailyStartHour" class="form-control" placeholder="Enter the daily start hour">
+        </div>
+        <div class="mb-3">
+          <label>Daily Finish Hour</label>
+          <input type="text" [(ngModel)]="projectWorkerWorkingTimeDtoSingle.dailyFinishHour"formControlName="DailyFinishHour" class="form-control" placeholder="Enter the daily finish hour">
+        </div>
+        
+        <div class="mb-3">
+            <input type="submit" (click)="updateProjectWorkerWorkingTimes()" class="btn btn-primary" placeholder="Submit">
+        </div>
+    </form>
+  </div>
+</ng-template>
+
+
 
 
 

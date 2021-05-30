@@ -12,14 +12,15 @@ import {ToastrModule} from "ngx-toastr";
 
 import { AppRoutingModule } from './app.routing';
 import { ComponentsModule } from './components/components.module';
-import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
-import { ProjectDetailsComponent } from './pages/project-details/project-details.component';
-import { ProjectWorkerComponent } from './pages/project-worker/project-worker.component';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
   imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
@@ -28,15 +29,13 @@ import { ProjectWorkerComponent } from './pages/project-worker/project-worker.co
     RouterModule,
     AppRoutingModule,
     ToastrModule.forRoot({
-      positionClass: "toast-bottom-right",      
+      positionClass:"toast-bottom-right"
     }),
   ],
   declarations: [
     AppComponent,
     AdminLayoutComponent,
     AuthLayoutComponent,
-    
-    
     
   ],
   providers: [],

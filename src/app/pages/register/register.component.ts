@@ -65,11 +65,11 @@ export class RegisterComponent implements OnInit {
     this.authService.register(registerModel).subscribe((response) => {
       localStorage.setItem("token",response.data.token)
       localStorage.setItem("expiration",response.data.expiration)
-      localStorage.setItem("userID",response.data.userID.toString())
+      localStorage.setItem("userID",response.data.userID.toString())      
       this.toastrService.info(response.message);
       this.router.navigate(['']);
     },responseError=>{
-      this.toastrService.error(responseError.error)
+      this.toastrService.error(responseError.error.message)
     });
   }
 

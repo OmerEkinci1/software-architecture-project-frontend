@@ -19,6 +19,7 @@ import { WorkerCreationDto } from 'src/app/models/workers/workerCreationDto';
 })
 export class WorkerComponent implements OnInit {
 
+  workerModel
   workerCreationDto : WorkerCreationDto
   workers : WorkerModel
   workersDto : WorkerDto[] = []
@@ -37,10 +38,21 @@ export class WorkerComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router) { }
 
-  workerForm: FormGroup; 
+  workerForm: FormGroup;
+  workerUpdateForm : FormGroup 
   modalRef : BsModalRef;
 
   openModal(template: TemplateRef<any>){
+    this.modalRef = this.modalService.show(template);
+  }
+
+  openModalUpdate(template: TemplateRef<any>, workerDto : WorkerDto){
+    this.workerModel = new WorkerDto(workerDto["workerID"],workerDto["workerName"],workerDto["workerSurname"],
+    workerDto["userID"],workerDto["name"],workerDto["dailyWorkingTime"],workerDto["hourSalary"],workerDto["startTime"],workerDto["status"],
+    workerDto["departmentType"])
+
+    console.log( this.workerModel)
+    this.createWorkerUpdateForm()
     this.modalRef = this.modalService.show(template);
   }
 
@@ -53,12 +65,23 @@ export class WorkerComponent implements OnInit {
 
   createWorkerForm() {
     this.workerForm = this.formBuilder.group({
-      departmentTypeID:[[], Validators.required],
+      DepartmentTypes:[[], Validators.required],
       userID:['', Validators.required],
       workerName:['', Validators.required],
       workerSurname:['', Validators.required],
       DailyWorkingTime:['', Validators.required],
       HourSalary:['',Validators.required],
+    })
+  }
+
+  createWorkerUpdateForm() {
+    this.workerUpdateForm = this.formBuilder.group({
+      DepartmentTypes:[this.workerModel["DepartmentType"], Validators.required],
+      userID:[this.workerModel["UserID"], Validators.required],
+      workerName:[this.workerModel["WorkerName"], Validators.required],
+      workerSurname:[this.workerModel["WorkerSurname"], Validators.required],
+      DailyWorkingTime:[this.workerModel["DailyWorkingTime"], Validators.required],
+      HourSalary:[this.workerModel["HourSalary"],Validators.required],
     })
   }
 
@@ -87,58 +110,55 @@ export class WorkerComponent implements OnInit {
   }
 
   addWorker(){
-    console.log(this.workerForm.value.departmentTypeID)
+    console.log(this.workerForm.value.DepartmentTypes)
+
     if(this.workerForm.valid){
       this.workerForm.value.userID = Number(this.workerForm.value.userID)      
-      // for (let index = 0; index < this.workerForm.value.departmentTypeID.length; index++) {
-      //   this.workerForm.value.departmentTypeID[index] = Number(this.workerForm.value.departmentTypeID[index])        
+      // for (let index = 0; index < this.workerForm.value.DepartmentTypes.length; index++) {
+      //   this.workerForm.value.DepartmentTypes[index] = Number(this.workerForm.value.DepartmentTypes[index])        
       // }
       
       this.workerForm.value.DailyWorkingTime = Number(this.workerForm.value.DailyWorkingTime)
       console.log(this.workerForm.value)
       this.workerCreationDto = Object.assign({}, this.workerForm.value);
+      console.log(this.workerCreationDto)
       this.workerService.add(this.workerCreationDto).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
-        this.router.navigate(['worker']);
-      },
-      (responseError) => {
-        if (responseError.error.Errors.length > 0) {
-          for (let index = 0; index < responseError.error.Errors.length; index++){
-            this.toastrService.error(responseError.error.Errors[index].ErrorMessage, "Verification Error");
-          }
-        }       
-      })
+        this.getWorkers()
+      },responseError=>{
+        this.toastrService.error(responseError.error.message)
+      }
+      )
     } else {
       this.toastrService.error("Your form is missing", "Warning");
-    }
+        }
   }
 
   deleteWorker(worker:WorkerModel){
     this.workerService.delete(worker).subscribe((response => {
       this.toastrService.success(response.message);
-      this.router.navigate(['worker']);
+      this.getWorkers()
     }),errorResponse=>{
-      if (errorResponse.error.error.length>0){
-        for(let i=0; i < errorResponse.error.error.length; i++){
-          this.toastrService.error(errorResponse.error.error[i].ErrorMessage,"Verification Error");
-        }
-      }
-    })
+      this.toastrService.error(errorResponse.error.message)
+    }
+    )
   }
 
   updateWorker(){
-    if(this.workerForm.valid){
-      let workerModel = Object.assign({}, this.workerForm.value);
+    console.log("geldi")
+    if(this.workerUpdateForm.valid){
+      console.log("girdi")
+      let workerModel = Object.assign({}, this.workerUpdateForm.value);
+      workerModel.WorkerID=this.workerModel["WorkerID"]
+      workerModel.Status=this.workerModel["Status"]
+      workerModel.Name=this.workerModel["Name"]
+
+      console.log(workerModel)
       this.workerService.update(workerModel).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
-        this.router.navigate(['worker']);
-      },
-      (responseError) => {
-        if (responseError.error.Errors.length > 0) {
-          for (let index = 0; index < responseError.error.Errors.length; index++){
-            this.toastrService.error(responseError.error.Errors[index].ErrorMessage, "Verification Error");
-          }
-        }       
+        this.getWorkers()
+      },errorResponse=>{
+        this.toastrService.error(errorResponse.error.message)
       })
     } else {
       this.toastrService.error("Your form is missing", "Warning");

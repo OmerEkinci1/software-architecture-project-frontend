@@ -13,7 +13,7 @@
             <div class="card-header bg-transparent border-0 container">
                 <input class="form-control" [(ngModel)]="filterText" id="filterText" type="text" placeholder="Search worker departments">
             </div>
-            <div class="card-header bg-transparent border-0 container" >
+            <div class="card-header bg-transparent border-0 " >
               <button (click)="openModal(templateadd)" class="btn btn-primary">Create</button>
             </div>
         </div>
@@ -32,15 +32,21 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let wdt of workerDepartmentDto | filterPipe : filterText">
+              <tr *ngFor="let wdt of workerDepartmentDto">
                 <td>{{ wdt.workerName }}</td>
                 <td>{{ wdt.workerSurname }}</td>
                 <td>{{ wdt.dailyWorkingTime }} </td>
                 <td>{{ wdt.hourSalary}}</td>
                 <td>{{ wdt.startTime }}</td>
-                <td>{{ wdt.DepartmentTypes.departmentTypeName}}</td>
                 <td>
-                    <button (click)="deleteWorkerDepartmentType(workerDepartmentType)" class="btn btn-primary">Delete</button>
+                  <table>
+                      <tr *ngFor="let department of wdt.departmentTypes">
+                          <td >{{ department.departmentTypeName }}</td>    
+                      </tr>
+                  </table>
+                </td>
+                <td>
+                    <button (click)="deleteWorkerDepartmentType(wdt)" class="btn btn-danger">Delete</button>
                 </td>                   
               </tr>     
             </tbody>
@@ -67,7 +73,7 @@
           </select>
         </div>
         <div class="mb-3">
-          <label >Worker</label>
+          <label >Department</label>
           <select formControlName="DepartmentTypeID" class="form-control">
             <option *ngFor="let dep of departmentTypes" [value]="dep.departmentTypeID">{{dep.departmentTypeName}}</option> 
           </select>

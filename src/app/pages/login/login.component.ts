@@ -27,30 +27,31 @@ export class LoginComponent implements OnInit {
   }
 
   createLoginForm(){
-    this.loginForm = this.formBuilder.group({
-      email: ["",Validators.required],
-      password:["",Validators.required],
-      rememberMe:[""]
+
+    this.loginForm = this.formBuilder.group({     
+      email: [localStorage.getItem("email")?localStorage.getItem("email"):"",Validators.required],
+      password:[localStorage.getItem("password")?localStorage.getItem("password"):"",Validators.required],
+      rememberMe:[localStorage.getItem("email")?true:false]
     })
+
   }
 
   login(){
-    console.log("giremedi")
     if(this.loginForm.valid){
       let loginModel = Object.assign({},this.loginForm.value)
       this.authService.login(loginModel).subscribe(response=>{
-        this.toastrService.info(response.message)
-        console.log("naber")
-        if(this.isChecked){    
-          console.log("girdi")    
-          console.log(this.isChecked)
+
+        if(this.loginForm.value.rememberMe){       
+          localStorage.setItem("email",this.loginForm.value.email)
+          localStorage.setItem("password",this.loginForm.value.password)
           localStorage.setItem("token",response.data.token)
           localStorage.setItem("expiration",response.data.expiration)
           localStorage.setItem("userID",response.data.userID.toString())
         }
+        this.toastrService.info(response.message)
         this.router.navigate(['']);
       },responseError=>{
-        this.toastrService.error(responseError.error)
+        this.toastrService.error(responseError.error.message)
       })
     }
   }

@@ -1,7 +1,6 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Console } from 'console';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { ProjectWorker } from 'src/app/models/projectWorkers/projectWorker';
@@ -11,6 +10,7 @@ import { WorkerModel } from 'src/app/models/workers/workerModel';
 import { ProjectGeneralService } from 'src/app/services/project-general.service';
 import { ProjectSectionDepartmentService } from 'src/app/services/project-section-department.service';
 import { ProjectSectionsService } from 'src/app/services/project-sections.service';
+import { ProjectWorkerWorkingTimeService } from 'src/app/services/project-worker-working-time.service';
 import { ProjectWorkerService } from 'src/app/services/project-worker.service';
 import { WorkerService } from 'src/app/services/worker.service';
 
@@ -21,7 +21,9 @@ import { WorkerService } from 'src/app/services/worker.service';
 })
 export class ProjectWorkerComponent implements OnInit {
 
-  projectWorker 
+  projectWorker
+  projectWorkerSingle
+  projectSectionDepartmentGetAll 
   projects
   projectSections
   projectSectionDepartments
@@ -31,6 +33,7 @@ export class ProjectWorkerComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private projectWorkerService : ProjectWorkerService,
+    private projectWorkerWorkingTimeService : ProjectWorkerWorkingTimeService,
     private projectService : ProjectGeneralService,
     private workerService : WorkerService,
     private projectSectionService : ProjectSectionsService,
@@ -41,6 +44,8 @@ export class ProjectWorkerComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.getProjectSectionDepartmentGetAll()
+    this.getProjectWorkerTable()
     this.createProjectWorkerForm()
     this.getProjectWorkers()
     this.getProjects()
@@ -50,13 +55,15 @@ export class ProjectWorkerComponent implements OnInit {
     this.modalRef = this.modalService.show(template,);
   }
 
-  openModalForProjectWorkerUpdate(template: TemplateRef<any>, projectworker: ProjectWorkerDto){
-    this.projectWorker=new ProjectWorkerDto(projectworker)
+  openModalForProjectWorkerUpdate(template: TemplateRef<any>, projectworkerDto: ProjectWorkerDto){
+    console.log(projectworkerDto)
+    this.projectWorkerSingle=new ProjectWorker(projectworkerDto["projectWorkerID"],projectworkerDto["workerID"],projectworkerDto["projectSectionDepartmentID"],projectworkerDto["status"])
     this.modalRef = this.modalService.show(template)
     console.log(this.projectWorker)
   }
 
   projectWorkerForm : FormGroup
+  projectWorkerWorkingTimeForm : FormGroup
   modalRef : BsModalRef;
 
   createProjectWorkerForm () {
@@ -65,6 +72,22 @@ export class ProjectWorkerComponent implements OnInit {
       Project:[],
       ProjectSection:[],
       ProjectSectionDepartment:['', Validators.required],
+    })
+  }
+
+  createProjectWorkerWorkingTime () {
+    this.projectWorkerWorkingTimeForm = this.formBuilder.group({
+      // Date:[this.projectWorkerWorkingTimeDtoSingle.Date],
+      // ProjectWorkerID:[this.projectWorkerWorkingTimeDtoSingle["workerName"] +this.projectWorkerWorkingTimeDtoSingle["workerSurname"]],
+      DailyStartHour:['', Validators.required],
+      DailyFinishHour:['', Validators.required],
+    })
+  }
+
+  getProjectWorkerTable(){
+    this.projectWorkerService.getAll().subscribe((response) => {
+      this.projectWorkerGeneralDtos = response.data
+      console.log(response.data)
     })
   }
 
@@ -81,26 +104,28 @@ export class ProjectWorkerComponent implements OnInit {
   }
 
   getProjectSections(projectID:number){
-    console.log("geldi")
-    console.log(projectID)
     this.projectSectionService.getByProjectID(projectID).subscribe((response) => {
       this.projectSections = response.data
-      console.log(response.data)
     })
   }
 
   getProjectSectionDepartments(sectionID:number){
     this.projectSectionDepartmentService.getBySectionID(sectionID).subscribe((response) => {
       this.projectSectionDepartments = response.data
+      console.log(response.data)
+    })
+  }
+
+  getProjectSectionDepartmentGetAll(){
+    this.projectSectionDepartmentService.getAll().subscribe((response) => {
+      this.projectSectionDepartmentGetAll = response.data
+      console.log(response.data)
     })
   }
  
   addProjectWorkers(){
-    console.log("geldi")
     if(this.projectWorkerForm.valid){
-      console.log("girdi")
-      let wk = new  ProjectWorker(Number(this.projectWorkerForm.value.Worker), Number(this.projectWorkerForm.value.ProjectSectionDepartment))
-      console.log(wk)
+      let wk = new  ProjectWorker( 0,Number(this.projectWorkerForm.value.ProjectSectionDepartment), Number(this.projectWorkerForm.value.Worker),false)
       this.projectWorkerService.add(wk).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
       },
@@ -116,8 +141,9 @@ export class ProjectWorkerComponent implements OnInit {
     }
   }
 
-  deleteProjectWorker(projectWorker:ProjectWorker){
-    this.projectWorkerService.delete(projectWorker).subscribe((response => {
+  deleteProjectWorker(projectWorkerID:number){
+    console.log(projectWorkerID)
+    this.projectWorkerService.delete(projectWorkerID).subscribe((response => {
       this.toastrService.success(response.message);
     }),errorResponse=>{
       if (errorResponse.error.error.length>0){
@@ -132,6 +158,28 @@ export class ProjectWorkerComponent implements OnInit {
     if(this.projectWorkerForm.valid){
       let projectWorkerModel = Object.assign({}, this.projectWorkerForm.value);
       this.projectWorkerService.update(projectWorkerModel).subscribe((response) => {
+        this.toastrService.success(response.message, "Success");
+      },
+      (responseError) => {
+        if (responseError.error.Errors.length > 0) {
+          for (let index = 0; index < responseError.error.Errors.length; index++){
+            this.toastrService.error(responseError.error.Errors[index].ErrorMessage, "Verification Error");
+          }
+        }       
+      })
+    } else {
+      this.toastrService.error("Your form is missing", "Warning");
+    }
+  }
+
+  addProjectWorkerWorkingTimes(){
+    console.log("geldi")
+    if(this.projectWorkerWorkingTimeForm.valid){
+      console.log("girdi")
+      let projectWorkerWorkingTimeModel = Object.assign({}, this.projectWorkerWorkingTimeForm.value);
+      projectWorkerWorkingTimeModel.ProjectWorkerID = Number(projectWorkerWorkingTimeModel.ProjectWorkerID)
+      console.log(projectWorkerWorkingTimeModel)
+      this.projectWorkerWorkingTimeService.add(projectWorkerWorkingTimeModel).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
       },
       (responseError) => {

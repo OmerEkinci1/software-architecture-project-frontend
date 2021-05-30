@@ -10,8 +10,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRippleModule } from '@angular/material/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { BrowserModule } from '@angular/platform-browser';
-//import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
   imports: [
@@ -22,6 +20,7 @@ import { BrowserModule } from '@angular/platform-browser';
     MatFormFieldModule,
     MatSelectModule,
     MatRippleModule,
+
   ],
   declarations: [
     LoginComponent,

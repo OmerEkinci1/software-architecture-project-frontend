@@ -11,8 +11,8 @@
             <div class="card-header bg-transparent border-0 container">
                 <input class="form-control" [(ngModel)]="filterText" id="filterText" type="text" placeholder="Search worker compensations">
             </div>
-            <div class="card-header bg-transparent border-0 container" >
-              <button class="btn btn-primary">Create</button>
+            <div class="card-header bg-transparent border-0 " >
+              <button (click)="openModal(templateaddproject)" class="btn btn-primary">Create</button>
             </div>
         </div>
         
@@ -67,7 +67,7 @@
             <div class="card-header bg-transparent border-0 container">
                 <input class="form-control" [(ngModel)]="filterText" id="filterText" type="text" placeholder="Search worker compensations">
             </div>
-            <div class="card-header bg-transparent border-0 container" >
+            <div class="card-header bg-transparent border-0 " >
               <button (click)="openModal(templateaddprojectsection)" class="btn btn-primary">Create</button>
             </div>
         </div>
@@ -123,7 +123,7 @@
             <div class="card-header bg-transparent border-0 container">
                 <input class="form-control" [(ngModel)]="filterText" id="filterText" type="text" placeholder="Search project section department">
             </div>
-            <div class="card-header bg-transparent border-0 container" >
+            <div class="card-header bg-transparent border-0 " >
               <button (click)="openModal(templateaddprojectsectiondepartment)" class="btn btn-primary">Create</button>
             </div>
         </div>
@@ -272,7 +272,7 @@
           </div>
         </div>
       </div>   
-      <div class="row" class="mb-3">
+      <div class="row" class="mb-3" style="text-align: center;">
         <button class="btn btn-primary" type="button" (click)="addNext()">Add New</button>
         <button class="btn btn-primary" type="button" (click)="addProject()">Create Project</button>
       </div>
