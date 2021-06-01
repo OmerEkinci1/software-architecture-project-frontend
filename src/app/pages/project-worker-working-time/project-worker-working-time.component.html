@@ -69,16 +69,16 @@
         <div class="mb-3">
           <label >Worker</label>
           <select formControlName="ProjectWorkerID" class="form-control" disabled>            
-            <option [(ngModel)]="projectWorkerWorkingTimeDtoSingle.workerID">{{projectWorkerWorkingTimeDtoSingle.workerName}} {{projectWorkerWorkingTimeDtoSingle.workerSurname }}</option> 
+            <option [value]="projectWorkerWorkingTimeDtoSingle.workerID">{{projectWorkerWorkingTimeDtoSingle.workerName}} {{projectWorkerWorkingTimeDtoSingle.workerSurname }}</option> 
           </select>
         </div>
         <div class="mb-3">
           <label>Daily Start Hour</label>
-          <input type="text" [(ngModel)]="projectWorkerWorkingTimeDtoSingle.dailyStartHour" formControlName="DailyStartHour" class="form-control" placeholder="Enter the daily start hour">
+          <input type="text" [value]="projectWorkerWorkingTimeDtoSingle.dailyStartHour" formControlName="DailyStartHour" class="form-control" placeholder="Enter the daily start hour">
         </div>
         <div class="mb-3">
           <label>Daily Finish Hour</label>
-          <input type="text" [(ngModel)]="projectWorkerWorkingTimeDtoSingle.dailyFinishHour"formControlName="DailyFinishHour" class="form-control" placeholder="Enter the daily finish hour">
+          <input type="text" [value]="projectWorkerWorkingTimeDtoSingle.dailyFinishHour"formControlName="DailyFinishHour" class="form-control" placeholder="Enter the daily finish hour">
         </div>
         
         <div class="mb-3">

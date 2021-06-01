@@ -52,16 +52,13 @@ export class RegisterComponent implements OnInit {
   getDepartmentTypeNames(){
     this.departmentTypeService.getAll().subscribe((response) => {
       this.departmentType = response.data
-      console.log(response.data)
     })
   }
 
   register() {
-    console.log(this.registerForm.value)
     if (!this.registerForm.valid) return;
     this.registerForm.value.departmentTypeID = Number(this.registerForm.value.departmentTypeID)
     let registerModel = Object.assign({}, this.registerForm.value);
-    console.log(registerModel)
     this.authService.register(registerModel).subscribe((response) => {
       localStorage.setItem("token",response.data.token)
       localStorage.setItem("expiration",response.data.expiration)

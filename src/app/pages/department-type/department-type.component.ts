@@ -36,7 +36,6 @@ export class DepartmentTypeComponent implements OnInit {
 
   openModal(template: TemplateRef<any>,departmentType:DepartmentType){
     this.department=new DepartmentType(departmentType)
-    console.log(this.department)
     this.modalRef = this.modalService.show(template);
   }
 
@@ -47,18 +46,15 @@ export class DepartmentTypeComponent implements OnInit {
   }
 
   getDepartmentTypes(){
-    console.log("girdi")
     this.departmentTypeService.getAll().subscribe((response) => {
       this.departmentTypes = response.data
       this.dataLoaded = true
-      console.log(response.data)
     })
   }
 
   addDepartmentTypes(){
     if(this.departmentTypeForm.valid){
       let departmentTypeModel = Object.assign({}, this.departmentTypeForm.value);
-      console.log(departmentTypeModel)
       this.departmentTypeService.add(departmentTypeModel).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
         this.getDepartmentTypes()
@@ -77,8 +73,6 @@ export class DepartmentTypeComponent implements OnInit {
 
   updateDepartmentTypes(){
     if(this.departmentTypeForm.valid){
-      // this.department.DepartmentTypeName=this.departmentTypeForm.value
-      console.log(this.department)
       this.departmentTypeService.update(this.department).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
         this.getDepartmentTypes()

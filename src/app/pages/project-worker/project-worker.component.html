@@ -41,7 +41,7 @@
                     <td>{{ pw.projectWorkerDto.workerName }}</td>
                     <td>{{ pw.projectWorkerDto.workerSurname }}</td>
                     <td>
-                      <button (click)="openModal(templateadd)" class="btn btn-warning">Add Workinng Time</button>
+                      <button (click)="openModalForProjectWorkerWorkingTime(templateadd, pw.projectWorkerDto.projectWorkerID)" class="btn btn-warning">Add Workinng Time</button>
                     </td>
                     <td>
                         <button (click)="deleteProjectWorker(pw.projectWorkerDto.projectWorkerID)" class="btn btn-danger">Delete</button>
@@ -109,26 +109,24 @@
     </button>
   </div>
   <div class="modal-body">
-    <form [formGroup]="projectWorkerForm">
+    <form [formGroup]="projectWorkerUpdateForm"> 
       <div class="mb-3">
-        <label >Project Section Department</label>
-        <select formControlName="ProjectSectionDepartment" class="form-control" required>
-          <option [value]="" disabled selected >Select Project Section Department</option>
-          <option *ngFor="let psd of projectSectionDepartmentGetAll" [value]="psd.projectSectionDepartmentID">{{psd.departmentTypeName}}</option> 
-        </select>
+          <label >Project Section Department</label>
+          <select formControlName="ProjectSectionDepartmentID" class="form-control" required>
+            <option *ngFor="let psd of projectSectionDepartmentGetAll" [value]="psd.projectSectionDepartmentID">{{psd.departmentTypeName}}</option> 
+          </select>
       </div>
       <div class="mb-3">
-        <label >Worker</label>
-        <select formControlName="Worker" class="form-control" required>
-          <option [value]="" disabled selected >Select Project Worker</option>
-          <option *ngFor="let w of projectWorker" [value]="w.workerID"> {{w.workerName}} {{w.workerSurname }}</option> 
-        </select>
+          <label >Worker</label>
+          <select formControlName="WorkerID" class="form-control" required>
+            <option *ngFor="let w of projectWorker" [value]="w.workerID"> {{w.workerName}} {{w.workerSurname }}</option> 
+          </select>
       </div>
       <div class="mb-3">
           <input type="submit" (click)="updateProjectWorkers()" class="btn btn-primary" placeholder="Submit">
       </div>
-        
-    </form>
+      
+  </form>
 </div>
 </ng-template>
 

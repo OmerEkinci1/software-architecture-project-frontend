@@ -49,8 +49,6 @@ export class WorkerSalaryExperiencesComponent implements OnInit {
   openModalUpdate(template: TemplateRef<any>, workerSalaryExperiences : WorkerSalaryExperienceDto){
     this.workerSalaryExperience = new WorkerSalaryExperienceDto(workerSalaryExperiences["workerSalaryExperienceID"],workerSalaryExperiences["departmentTypeID"],workerSalaryExperiences["year"],workerSalaryExperiences.minHourSalary,workerSalaryExperiences.maxHourSalary)
     this.createWorkerSalaryExperienceUpdateForm()
-    console.log("asdasd")
-    console.log(this.workerSalaryExperience)
     this.modalRef = this.modalService.show(template);
   }
 
@@ -82,15 +80,12 @@ export class WorkerSalaryExperiencesComponent implements OnInit {
   getWorkerSalaryExperiences(){
     this.workerSalaryExperienceService.getAll().subscribe((response) => {
       this.workerSalaryExperienceDtos = response.data
-      console.log(response.data)
       this.dataLoaded = true
     })
   }
 
   addWorkerSalaryExperiences (){
-    console.log("geldi")
     if(this.workerSalaryExperiencesForm.valid){
-      console.log("girdi")
       this.addworkerSalaryExperience = new WorkerSalaryExperience(
         Number(this.workerSalaryExperiencesForm.value.DepartmentTypeID),
         Number(this.workerSalaryExperiencesForm.value.Year),
@@ -112,7 +107,6 @@ export class WorkerSalaryExperiencesComponent implements OnInit {
     if(this.workerSalaryExperiencesUpdateForm.valid){
       let workerSalaryExperienceModel = Object.assign({}, this.workerSalaryExperiencesUpdateForm.value);
       workerSalaryExperienceModel.WorkerSalaryExperienceID=Number(this.workerSalaryExperience.WorkerSalaryExperienceID)
-      console.log(workerSalaryExperienceModel)
       this.workerSalaryExperienceService.update(workerSalaryExperienceModel).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
         this.getWorkerSalaryExperiences()

@@ -24,6 +24,7 @@ export class ProjectWorkerComponent implements OnInit {
   projectWorker
   projectWorkerSingle
   projectSectionDepartmentGetAll 
+  projectWorkerIDforPWW
   projects
   projectSections
   projectSectionDepartments
@@ -55,15 +56,22 @@ export class ProjectWorkerComponent implements OnInit {
     this.modalRef = this.modalService.show(template,);
   }
 
+  openModalForProjectWorkerWorkingTime(template: TemplateRef<any>, projectWorkerID:number){
+    this.projectWorkerIDforPWW = projectWorkerID
+    this.createProjectWorkerWorkingTime()
+    this.modalRef = this.modalService.show(template,);
+  }
+
   openModalForProjectWorkerUpdate(template: TemplateRef<any>, projectworkerDto: ProjectWorkerDto){
     console.log(projectworkerDto)
     this.projectWorkerSingle=new ProjectWorker(projectworkerDto["projectWorkerID"],projectworkerDto["workerID"],projectworkerDto["projectSectionDepartmentID"],projectworkerDto["status"])
+    this.createProjectWorkerUpdateForm ()
     this.modalRef = this.modalService.show(template)
-    console.log(this.projectWorker)
   }
 
   projectWorkerForm : FormGroup
   projectWorkerWorkingTimeForm : FormGroup
+  projectWorkerUpdateForm : FormGroup
   modalRef : BsModalRef;
 
   createProjectWorkerForm () {
@@ -72,6 +80,13 @@ export class ProjectWorkerComponent implements OnInit {
       Project:[],
       ProjectSection:[],
       ProjectSectionDepartment:['', Validators.required],
+    })
+  }
+
+  createProjectWorkerUpdateForm () {
+    this.projectWorkerUpdateForm = this.formBuilder.group({
+      WorkerID:[this.projectWorkerSingle["WorkerID"], Validators.required],
+      ProjectSectionDepartmentID:[this.projectWorkerSingle["ProjectSectionDepartmentID"], Validators.required],
     })
   }
 
@@ -87,7 +102,6 @@ export class ProjectWorkerComponent implements OnInit {
   getProjectWorkerTable(){
     this.projectWorkerService.getAll().subscribe((response) => {
       this.projectWorkerGeneralDtos = response.data
-      console.log(response.data)
     })
   }
 
@@ -112,29 +126,24 @@ export class ProjectWorkerComponent implements OnInit {
   getProjectSectionDepartments(sectionID:number){
     this.projectSectionDepartmentService.getBySectionID(sectionID).subscribe((response) => {
       this.projectSectionDepartments = response.data
-      console.log(response.data)
     })
   }
 
   getProjectSectionDepartmentGetAll(){
     this.projectSectionDepartmentService.getAll().subscribe((response) => {
       this.projectSectionDepartmentGetAll = response.data
-      console.log(response.data)
     })
   }
  
   addProjectWorkers(){
     if(this.projectWorkerForm.valid){
-      let wk = new  ProjectWorker( 0,Number(this.projectWorkerForm.value.ProjectSectionDepartment), Number(this.projectWorkerForm.value.Worker),false)
+      let wk = new  ProjectWorker( 0, Number(this.projectWorkerForm.value.Worker),Number(this.projectWorkerForm.value.ProjectSectionDepartment),false)
+
       this.projectWorkerService.add(wk).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
-      },
-      (responseError) => {
-        if (responseError.error.Errors.length > 0) {
-          for (let index = 0; index < responseError.error.Errors.length; index++){
-            this.toastrService.error(responseError.error.Errors[index].ErrorMessage, "Verification Error");
-          }
-        }       
+        this.getProjectWorkerTable()
+      },responseError=>{
+        this.toastrService.error(responseError.error.message)
       })
     } else {
       this.toastrService.error("Your form is missing", "Warning");
@@ -142,30 +151,25 @@ export class ProjectWorkerComponent implements OnInit {
   }
 
   deleteProjectWorker(projectWorkerID:number){
-    console.log(projectWorkerID)
     this.projectWorkerService.delete(projectWorkerID).subscribe((response => {
       this.toastrService.success(response.message);
-    }),errorResponse=>{
-      if (errorResponse.error.error.length>0){
-        for(let i=0; i < errorResponse.error.error.length; i++){
-          this.toastrService.error(errorResponse.error.error[i].ErrorMessage,"Verification Error");
-        }
-      }
-    })
+      this.getProjectWorkerTable()
+    }),responseError=>{
+        this.toastrService.error(responseError.error.message)
+      })
   }
 
   updateProjectWorkers(){
-    if(this.projectWorkerForm.valid){
-      let projectWorkerModel = Object.assign({}, this.projectWorkerForm.value);
+    if(this.projectWorkerUpdateForm.valid){
+      this.projectWorkerUpdateForm.value.WorkerID=Number(this.projectWorkerUpdateForm.value.WorkerID)
+      let projectWorkerModel = Object.assign({}, this.projectWorkerUpdateForm.value);
+      projectWorkerModel.Status=true;
+      projectWorkerModel.ProjectWorkerID=this.projectWorkerSingle["ProjectWorkerID"]
       this.projectWorkerService.update(projectWorkerModel).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
-      },
-      (responseError) => {
-        if (responseError.error.Errors.length > 0) {
-          for (let index = 0; index < responseError.error.Errors.length; index++){
-            this.toastrService.error(responseError.error.Errors[index].ErrorMessage, "Verification Error");
-          }
-        }       
+        this.getProjectWorkerTable()
+      },responseError=>{
+        this.toastrService.error(responseError.error.message)
       })
     } else {
       this.toastrService.error("Your form is missing", "Warning");
@@ -173,21 +177,13 @@ export class ProjectWorkerComponent implements OnInit {
   }
 
   addProjectWorkerWorkingTimes(){
-    console.log("geldi")
     if(this.projectWorkerWorkingTimeForm.valid){
-      console.log("girdi")
-      let projectWorkerWorkingTimeModel = Object.assign({}, this.projectWorkerWorkingTimeForm.value);
-      projectWorkerWorkingTimeModel.ProjectWorkerID = Number(projectWorkerWorkingTimeModel.ProjectWorkerID)
-      console.log(projectWorkerWorkingTimeModel)
+      let projectWorkerWorkingTimeModel = Object.assign({}, this.projectWorkerWorkingTimeForm.value);     
+      projectWorkerWorkingTimeModel.ProjectWorkerID = this.projectWorkerIDforPWW
       this.projectWorkerWorkingTimeService.add(projectWorkerWorkingTimeModel).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
-      },
-      (responseError) => {
-        if (responseError.error.Errors.length > 0) {
-          for (let index = 0; index < responseError.error.Errors.length; index++){
-            this.toastrService.error(responseError.error.Errors[index].ErrorMessage, "Verification Error");
-          }
-        }       
+      },responseError=>{
+        this.toastrService.error(responseError.error.message)
       })
     } else {
       this.toastrService.error("Your form is missing", "Warning");

@@ -40,10 +40,9 @@ export class SalaryComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUserByStatusTrue()
-    this.getWorkerByStatusFalse()
+    this.getAllWorker()
     this.getSalaries()
     this.createSalaryForm()
-    this.createSalarynUpdateForm()
     this.activatedRoute.queryParams.subscribe((params) => {
       if(params['UserID'])
         this.getSalaryByUserID(params['UserID'])
@@ -55,13 +54,13 @@ export class SalaryComponent implements OnInit {
   }
 
   openModal(template: TemplateRef<any>, salaryDto: WorkerSalaryDto){
-    this.salaryDto = salaryDto
     this.salaries = new WorkerSalaryDto(salaryDto)
     // this.salaries.WorkerID = this.salaryDto.SalaryID  
     // this.salaries.WorkerID = this.salaryDto.WorkerID 
     // this.salaries.UserID = this.salaryDto.UserID 
     // this.salaries.SalaryDate = this.salaryDto.SalaryDate 
     // this.salaries.SalaryAmount = this.salaryDto.SalaryAmount 
+    this.createSalarynUpdateForm()
     this.modalRef = this.modalService.show(template)
   }
 
@@ -78,11 +77,11 @@ export class SalaryComponent implements OnInit {
 
   createSalarynUpdateForm() {
     this.salaryUpdateForm = this.formBuilder.group({
-      WorkerName:['',Validators.required],
-      WorkerSurname:['',Validators.required],
-      UserName:['',Validators.required],
-      UserSurname:['',Validators.required],
-      SalaryAmount:['', Validators.required],
+      WorkerName:[this.salaries["workerName"],Validators.required],
+      WorkerSurname:[this.salaries["workerSurname"],Validators.required],
+      UserName:[this.salaries["name"],Validators.required],
+      UserSurname:[this.salaries["surname"],Validators.required],
+      SalaryAmount:[this.salaries["salaryAmount"], Validators.required],
     })
   }
 
@@ -100,8 +99,8 @@ export class SalaryComponent implements OnInit {
     })
   }
 
-  getWorkerByStatusFalse(){
-    this.workerService.getallworkerstatusfalse().subscribe((response) => {
+  getAllWorker(){
+    this.workerService.getAll().subscribe((response) => {
       this.worker = response.data
       this.dataLoaded = true
     })
@@ -112,13 +111,10 @@ export class SalaryComponent implements OnInit {
       this.salaryAdd=new Salary(Number(this.salaryForm.value.UserID),Number(this.salaryForm.value.WorkerID),this.salaryForm.value.SalaryAmount)
       this.salaryService.add(this.salaryAdd).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
+        this.getSalaries()
       },
-      (responseError) => {
-        if (responseError.error.Errors.length > 0) {
-          for (let index = 0; index < responseError.error.Errors.length; index++){
-            this.toastrService.error(responseError.error.Errors[index].ErrorMessage, "Verification Error");
-          }
-        }       
+      responseError=>{
+        this.toastrService.error(responseError.error.message)
       })
     } else {
       this.toastrService.error("Your form is missing", "Warning");
@@ -126,16 +122,16 @@ export class SalaryComponent implements OnInit {
   }
 
   updateSalary(){
-    if(this.salaryForm.valid){
-      this.salaryService.update(this.salaries).subscribe((response) => {
+    if(this.salaryUpdateForm.valid){
+      let loginModel=new Salary(this.salaries["userID"],this.salaries["workerID"],this.salaryUpdateForm.value.SalaryAmount)      
+      loginModel.SalaryID=Number(this.salaries["salaryID"])
+
+      this.salaryService.update(loginModel).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
+        this.getSalaries()
       },
-      (responseError) => {
-        if (responseError.error.Errors.length > 0) {
-          for (let index = 0; index < responseError.error.Errors.length; index++){
-            this.toastrService.error(responseError.error.Errors[index].ErrorMessage, "Verification Error");
-          }
-        }       
+      responseError=>{
+        this.toastrService.error(responseError.error.message)
       })
     } else {
       this.toastrService.error("Your form is missing", "Warning");

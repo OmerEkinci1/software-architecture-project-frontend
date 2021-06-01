@@ -47,8 +47,7 @@ export class UserProfileComponent implements OnInit {
 
   getUsersByID(){
     let UserID = Number(localStorage.getItem("userID"))
-    this.userService.get(UserID).subscribe((response) => {
-      console.log(response.data)      
+    this.userService.get(UserID).subscribe((response) => {     
       this.users = response.data
       this.createUserUpdateForm()      
       this.dataLoaded = true
@@ -59,7 +58,6 @@ export class UserProfileComponent implements OnInit {
     if(this.userUpdateForm.valid){
       let userModel = Object.assign({}, this.userUpdateForm.value);
       userModel.userID = Number(localStorage.getItem("userID"));
-      console.log(userModel)
       this.userService.update(userModel).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
         this.router.navigate(['']);

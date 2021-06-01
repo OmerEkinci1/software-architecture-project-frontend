@@ -38,8 +38,7 @@ export class ProjectDetailsComponent implements OnInit {
       this.projectGeneralDto = response.data,
       this.projectDetailDto=response.data["projectDetailDto"]
       this.projectKeepListDepartmentDto=response.data["projectSectionKeepListDepartments"]
-      console.log(this.projectKeepListDepartmentDto)
-      if (this.projects.length == 0) {
+      if (response.data.length == 0) {
         this.toastrService.info("There is no record for your filter.","Result of searching");
       }
     })

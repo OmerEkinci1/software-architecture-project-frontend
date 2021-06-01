@@ -88,7 +88,6 @@ export class WorkerComponent implements OnInit {
   getWorkers(){
     this.workerService.getAll().subscribe((response) => {
       this.workersDto = response.data
-      console.log(response.data)
       this.dataLoaded = true
     })
   }
@@ -110,8 +109,6 @@ export class WorkerComponent implements OnInit {
   }
 
   addWorker(){
-    console.log(this.workerForm.value.DepartmentTypes)
-
     if(this.workerForm.valid){
       this.workerForm.value.userID = Number(this.workerForm.value.userID)      
       // for (let index = 0; index < this.workerForm.value.DepartmentTypes.length; index++) {
@@ -119,9 +116,7 @@ export class WorkerComponent implements OnInit {
       // }
       
       this.workerForm.value.DailyWorkingTime = Number(this.workerForm.value.DailyWorkingTime)
-      console.log(this.workerForm.value)
       this.workerCreationDto = Object.assign({}, this.workerForm.value);
-      console.log(this.workerCreationDto)
       this.workerService.add(this.workerCreationDto).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
         this.getWorkers()
@@ -145,15 +140,12 @@ export class WorkerComponent implements OnInit {
   }
 
   updateWorker(){
-    console.log("geldi")
     if(this.workerUpdateForm.valid){
-      console.log("girdi")
       let workerModel = Object.assign({}, this.workerUpdateForm.value);
       workerModel.WorkerID=this.workerModel["WorkerID"]
       workerModel.Status=this.workerModel["Status"]
       workerModel.Name=this.workerModel["Name"]
 
-      console.log(workerModel)
       this.workerService.update(workerModel).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
         this.getWorkers()

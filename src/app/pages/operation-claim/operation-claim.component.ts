@@ -123,7 +123,6 @@ export class OperationClaimComponent implements OnInit {
 
   updateOperationClaim(){
     if(this.operationClaimForm.valid){
-      console.log(this.operationClaim)
       this.operationClaimService.update(this.operationClaim).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
         this.getOperationClaims()
@@ -141,7 +140,6 @@ export class OperationClaimComponent implements OnInit {
       this.toastrService.success(response.message);
       this.getOperationClaims()
     }), (responseError) => {       
-      console.log(responseError)
       this.toastrService.error(responseError.error.message, "Verification Error");    
     })
   }
@@ -176,18 +174,14 @@ export class OperationClaimComponent implements OnInit {
   }
 
   updateUserOperationClaim(){
-    console.log("geldi")
     if(this.userOperationClaimUpdateForm.valid){
-      console.log("girdi")
       let userOperationClaimModel = Object.assign({}, this.userOperationClaimUpdateForm.value);
       userOperationClaimModel.OperationClaimID=Number(userOperationClaimModel.OperationClaimID)
-      console.log(userOperationClaimModel)
       this.userOperationClaimService.update(userOperationClaimModel).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
         this.getUserOperationClaims()
       },
       (responseError) => {       
-        console.log(responseError)
         this.toastrService.error(responseError.error.message, "Verification Error");    
       })
     } else {
@@ -200,16 +194,13 @@ export class OperationClaimComponent implements OnInit {
       this.users = response.data
       this.dataLoaded = true
     },responseError=>{
-      console.log(responseError)
       this.toastrService.error("Data not found","Error")
     })
   }
 
   getUserOperationClaims(){
-    console.log("girdi")
     this.userOperationClaimService.getAll().subscribe((response) => {
       this.userOperationClaimDto = response.data
-      console.log(response.data)
       this.dataLoaded = true
     })
   }

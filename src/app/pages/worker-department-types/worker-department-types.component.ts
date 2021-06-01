@@ -65,7 +65,6 @@ export class WorkerDepartmentTypesComponent implements OnInit {
   getWorkerDepartments(){
     this.workerDepartmentTypeService.getAll().subscribe((response) => {
       this.workerDepartmentDto = response.data
-      console.log(this.workerDepartmentDto)
       this.dataLoaded = true
     })
   }

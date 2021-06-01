@@ -101,26 +101,26 @@
     </button>
   </div>
   <div class="modal-body">
-    <form [formGroup]="salaryForm">
+    <form [formGroup]="salaryUpdateForm">
         <div class="mb-3">
             <label>Worker Name</label>
-            <input [(ngModel)]="salaryDto.workerName" disabled="true" type="text" formControlName="WorkerName" class="form-control">
+            <input  disabled="true" type="text" formControlName="WorkerName" class="form-control">
         </div>
         <div class="mb-3">
           <label>Worker Surname</label>
-          <input [(ngModel)]="salaryDto.workerSurname" disabled="true" type="text" formControlName="WorkerSurname"class="form-control">
+          <input  disabled="true" type="text" formControlName="WorkerSurname"class="form-control">
       </div>
         <div class="mb-3">
           <label>HR Name</label>
-          <input [(ngModel)]="salaryDto.name" disabled="true" type="text" formControlName="UserName" class="form-control">
+          <input  disabled="true" type="text" formControlName="UserName" class="form-control">
         </div>
         <div class="mb-3">
           <label>HR Surname</label>
-          <input [(ngModel)]="salaryDto.surname" disabled="true" type="text" formControlName="UserSurname" class="form-control">
+          <input  disabled="true" type="text" formControlName="UserSurname" class="form-control">
         </div>
         <div class="mb-3">
           <label>Salary Amount</label>
-          <input [(ngModel)]="salaryDto.salaryAmount"  type="text" formControlName="SalaryAmount" class="form-control" placeholder="Enter the compensation amount">
+          <input   type="number" formControlName="SalaryAmount" class="form-control" placeholder="Enter the compensation amount">
         </div>
         <div class="mb-3">
             <input type="submit" (click)="updateSalary()" class="btn btn-primary" placeholder="Submit">

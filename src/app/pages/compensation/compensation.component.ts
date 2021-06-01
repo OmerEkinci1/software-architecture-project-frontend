@@ -42,10 +42,8 @@ export class CompensationComponent implements OnInit {
   compensationUpdateForm : FormGroup;
 
   openModal(template: TemplateRef<any>, compensationDtoFromHtml: WorkerCompensationDto){
-    console.log(compensationDtoFromHtml)
     this.compensations=new WorkerCompensationDto(compensationDtoFromHtml)
     this.modalRef = this.modalService.show(template)
-    console.log(this.compensations)
   }
 
   openModalAdd(template: TemplateRef<any>){
@@ -108,11 +106,10 @@ export class CompensationComponent implements OnInit {
 
   addCompensation(){
     if(this.compensationForm.valid){     
-      console.log(this.compensationForm.value) 
       this.compensationAdd=new Compensation(Number(this.compensationForm.value.UserID),Number(this.compensationForm.value.WorkerID),this.compensationForm.value.CompensationAmount)
-      console.log(this.compensationAdd)
       this.compensationService.add(this.compensationAdd).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
+        this.getCompensations()
       },
       (responseError) => {
         if (responseError.error.Errors.length > 0) {
@@ -128,16 +125,12 @@ export class CompensationComponent implements OnInit {
 
   updateCompensation(){
     if(this.compensationUpdateForm.valid){
-      console.log(this.compensations)
       this.compensationService.update(this.compensations).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
+        this.getCompensations()
       },
-      (responseError) => {
-        if (responseError.error.Errors.length > 0) {
-          for (let index = 0; index < responseError.error.Errors.length; index++){
-            this.toastrService.error(responseError.error.Errors[index].ErrorMessage, "Verification Error");
-          }
-        }       
+      responseError=>{
+        this.toastrService.error(responseError.error.message)
       })
     } else {
       this.toastrService.error("Your form is missing", "Warning");

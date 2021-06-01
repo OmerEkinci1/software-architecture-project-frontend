@@ -51,7 +51,8 @@
                               <th scope="col">Remaining Section Time</th>
                               <th scope="col">Worker Count</th>
                               <th scope="col">Status</th>     
-                              <th scope="col">Department Types</th>                              
+                              <th scope="col">Department Types</th>      
+
                           </tr>
                       </thead>
                       <tbody>
@@ -59,7 +60,7 @@
                               <td>{{ project.projectSection.projectSectionName}}</td>
                               <td>{{ project.projectSection.projectSectionName }}</td>
                               <td>{{ project.projectSection.remainingSectionTime }} </td>
-                              <td>{{ project.projectSection.workerCount}}</td>
+                              <td>{{ project.projectSection.workerCount}}</td> 
                               <td>{{ project.projectSection.status}}</td>
                               <td>
                                   <table>
@@ -67,8 +68,7 @@
                                           <td>{{ psd.departmentTypeName }}</td> 
                                       </tr>
                                   </table>
-                              </td>
-                              <td>{{ project.maxWorkerCount }}</td>           
+                              </td>                                       
                           </tr>     
                       </tbody>
                   </table>

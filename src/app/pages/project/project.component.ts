@@ -9,7 +9,9 @@ import { ProjectCreationDto } from 'src/app/models/projects/projectCreationDto';
 import { ProjectDetailDto } from 'src/app/models/projects/projectDetailDto';
 import { ProjectGeneralDto } from 'src/app/models/projects/projectGeneralDto';
 import { ProjectSectionDepartment } from 'src/app/models/projectSectionDepartments/projectSectionDepartment';
+import { ProjectSectionDepartmentDto } from 'src/app/models/projectSectionDepartments/projectSectionDepartmentDto';
 import { ProjectSectionKeepListDepartmentDto } from 'src/app/models/projectSectionDepartments/projectSectionKeepListDepartmentDto';
+import { ProjectSectionDto } from 'src/app/models/projectSections/porjectSectionDto';
 import { ProjectSection } from 'src/app/models/projectSections/projectSection';
 import { ProjectSectionCreationDto } from 'src/app/models/projectSections/projectSectionCreationDto';
 import { ProjectWorkerDto } from 'src/app/models/projectWorkers/projectWorkerDto';
@@ -34,13 +36,16 @@ export class ProjectComponent implements OnInit {
   projectDetailDto : ProjectDetailDto[] = []
   projectSections : ProjectSection[] = []
   projectSectionCreationDto:ProjectSectionCreationDto[]=[]
-  projectSectionDepartments : ProjectSectionDepartment[] = []
+  projectSectionDepartmentDto : ProjectSectionDepartmentDto[] = []
   convertProjectDetailToProject
   projectForUpdate:Project
+  projectSectionDto:ProjectSectionDto[]=[]
 
   projectForm: FormGroup
   projectSectionForm : FormGroup
+  projectSectionUpdateForm : FormGroup
   projectSectionDepartmentForm : FormGroup
+  projectSectionDepartmentUpdateForm : FormGroup
   
   modalRef : BsModalRef;
   IncrementalForm : FormGroup
@@ -63,8 +68,10 @@ export class ProjectComponent implements OnInit {
     this.createInstance()
     this.createProjectAddForm();
     this.createProjectSectionForm()
-    this.createProjectSectiomDepartmentForm()
+    this.createProjectSectionDepartmentForm()
     this.getProjects()
+    this.getByAllSectionDepartments()
+    this.getProjectSectionAll()
     // this.activatedRoute.params.subscribe(params=> {
     //   if(params["ProjectID"]){
     //     this.getProjectByProjectID(params["ProjectID"]);
@@ -87,7 +94,6 @@ export class ProjectComponent implements OnInit {
 
   openModalForUpdateProject(template: TemplateRef<any>,project:Project){
     this.projectForUpdate=project 
-    console.log(this.projectForUpdate) 
     this.modalRef = this.modalService.show(template);
   }
   
@@ -102,24 +108,20 @@ export class ProjectComponent implements OnInit {
   openModalForProjectUpdate(template: TemplateRef<any>, projectDetailDto: ProjectDetailDto){
     this.project=new ProjectDetailDto(projectDetailDto)
     this.modalRef = this.modalService.show(template)
-    console.log(this.project)
   }
 
-  openModalForProjectSectionUpdate(template: TemplateRef<any>, projectSection: ProjectSection){
+  openModalForProjectSectionUpdate(template: TemplateRef<any>, projectSection: ProjectSectionDto){
     this.projectSection=new ProjectSection(projectSection)
+    this.createProjectSectionUpdateForm()
     this.modalRef = this.modalService.show(template)
-    console.log(this.projectSection)
   }
 
-  openModalForProjectSectionDepartmentUpdate(template: TemplateRef<any>, projectSectionDep: ProjectSectionKeepListDepartmentDto){
-    this.projectSectionDepartment=new ProjectSectionKeepListDepartmentDto(projectSectionDep)
+  openModalForProjectSectionDepartmentUpdate(template: TemplateRef<any>, projectSectionDep: ProjectSectionDepartmentDto){
+    this.projectSectionDepartment=projectSectionDep
+    this.createProjectSectionDepartmentUpdateForm()
     this.modalRef = this.modalService.show(template)
-    console.log(this.projectSectionDepartment)
   }
 
-  
-
-  
   addNext() {
     (this.IncrementalForm.controls['items'] as FormArray).push(this.createProjectSectionForm())
   }
@@ -136,11 +138,30 @@ export class ProjectComponent implements OnInit {
 
   createProjectSectionForm () {
     return this.projectSectionForm = this.formBuilder.group({
+      ProjectID:[,Validators.required],
       ProjectSectionName:['', Validators.required],
       SectionProjectTime:['', Validators.required],
       departmentTypeID:[this.departmentTypes, Validators.required],
     })
   }
+
+  createProjectSectionUpdateForm () {
+    return this.projectSectionUpdateForm = this.formBuilder.group({
+      ProjectName:[this.projectSection["params"]["projectID"], Validators.required],
+      ProjectSectionName:[this.projectSection["params"]["projectSectionName"], Validators.required],
+      SectionProjectTime:[this.projectSection["params"]["sectionProjectTime"],Validators.required],
+      RemainingSectionTime:[this.projectSection["params"]["remainingSectionTime"], Validators.required],
+      WorkerCount:[this.projectSection["params"]["workerCount"], Validators.required],
+    })
+  }
+
+  createProjectSectionDepartmentUpdateForm () {
+    return this.projectSectionDepartmentUpdateForm = this.formBuilder.group({
+      ProjectSectionID:[this.projectSectionDepartment["projectSectionID"], Validators.required],
+      DepartmentTypeID:[this.projectSectionDepartment["departmentTypeID"], Validators.required],
+    })
+  }
+  
 
   createProjectAddForm() {
     this.projectForm = this.formBuilder.group({
@@ -161,14 +182,13 @@ export class ProjectComponent implements OnInit {
     })
   }
 
-  
-
-  createProjectSectiomDepartmentForm () {
+  createProjectSectionDepartmentForm () {
     this.projectSectionDepartmentForm = this.formBuilder.group({
       ProjectSectionID:['', Validators.required],
-      DeaprtmentTypeID:['', Validators.required],
+      DepartmentTypeID:['', Validators.required],
     })
   }
+
 
   getProjects(){
     this.projectGeneralService.getAll().subscribe((response) => {
@@ -177,18 +197,44 @@ export class ProjectComponent implements OnInit {
       this.dataLoaded = true
     })
   }
+  // getSections(){
+  //   this.projectSectionService.().subscribe(response => {
+  //     this.projectSectionDepartmentDto = response.data,
+  //     console.log(this.projectSectionDepartmentDto)
+  //     this.dataLoaded = true
+  //     if (this.projectSectionDepartmentDto.length == 0) {
+  //       this.toastrService.info("There is no record for your filter.","Result of searching");
+  //     }
+  //   })
+  // }
 
-  getDepartmentTypes(){
+  getDepartmentTypes(){ 
     this.departmentTypeService.getAll().subscribe((response) => {
       this.departmentTypes = response.data
       this.dataLoaded = true
     })
   }
 
+  getProjectSectionAll(){ 
+    this.projectSectionService.getAll().subscribe((response) => {
+      this.projectSectionDto = response.data
+      this.dataLoaded = true
+    })
+  }
+
+  getByAllSectionDepartments(){
+    this.projectSectionDepartmentService.getAll().subscribe(response => {
+      this.projectSectionDepartmentDto = response.data,
+      this.dataLoaded = true
+      if (this.projectSectionDepartmentDto.length == 0) {
+        this.toastrService.info("There is no record for your filter.","Result of searching");
+      }
+    })
+  }
+
   
 
   addProject(){
-    console.log("geldi")
     if(this.projectForm.valid && this.IncrementalForm.valid){
       for (let i = 0; i < this.IncrementalForm.value.items.length; i++) {
         const result : ProjectSectionDepartment[] = []
@@ -200,19 +246,13 @@ export class ProjectComponent implements OnInit {
         this.projectSectionCreationDto.push(ProSec)   
       }
       let values= this.projectForm.value
-      let projectAdded=new ProjectCreationDto(values.UserID,values.ProjectName,values.Subject,values.ProjectBudget,values.MinWorkerCount,values.MaxWorkerCount,values.TotalDeclaredTime,this.projectSectionCreationDto)
-      console.log(projectAdded)
+      let projectAdded=new ProjectCreationDto(6,values.ProjectName,values.Subject,values.ProjectBudget,values.MinWorkerCount,values.MaxWorkerCount,values.TotalDeclaredTime,this.projectSectionCreationDto)
 
       this.projectGeneralService.add(projectAdded).subscribe((response)=>{
-        this.toastrService.success(response.message,"Success");    
-      },
-      (responseError) => {
-        if (responseError.error.Errors.length > 0) {
-          for (let index = 0; index < responseError.error.Errors.length; index++){
-            this.toastrService.error(responseError.error.Errors[index].ErrorMessage,"Verification Error");
-
-          }
-        }
+        this.toastrService.success(response.message,"Success");   
+        this.getProjects() 
+      },responseError=>{
+        this.toastrService.error(responseError.error.message)
       })
     } else {
       this.toastrService.error("Your form is missing", "Warning");
@@ -220,91 +260,119 @@ export class ProjectComponent implements OnInit {
   }
 
   deleteProject(ProjectID:number){
-    console.log(ProjectID)
     this.projectGeneralService.delete(ProjectID).subscribe((response) => {
       this.toastrService.success(response.message);
-    }), errorResponse => {
-      if (errorResponse.error.error.length>0){
-        for(let i=0; i < errorResponse.error.error.length; i++){
-          this.toastrService.error(errorResponse.error.error[i].ErrorMessage,"Verification Error");         
-        }
-      }
+      this.getProjects()
+    }),responseError=>{
+      this.toastrService.error(responseError.error.message)
     }
   }
 
   updateProject(){
-    console.log("geldi")
     if(this.projectForm.valid){
-      console.log("girdi")
       let projectModel = Object.assign({}, this.projectForm.value);
-      console.log(this.projectForUpdate)
-      projectModel.UserID=Number(localStorage.getItem("userID"));
-      console.log(projectModel)
+      projectModel.UserID=Number(6);
       this.projectGeneralService.update(projectModel).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
-      },
-      (responseError) => {
-        if (responseError.error.Errors.length > 0) {
-          for (let index = 0; index < responseError.error.Errors.length; index++){
-            this.toastrService.error(responseError.error.Errors[index].ErrorMessage, "Verification Error");
-          }
-        }       
+        this.getProjects()
+      },responseError=>{
+        this.toastrService.error(responseError.error.message)
       })
     } else {
       this.toastrService.error("Your form is missing", "Warning");
     }
   }  
 
+  addProjectSections(){
+    if(this.projectSectionForm.valid){
+      this.projectSectionForm.value.ProjectID = Number(this.projectSectionForm.value.ProjectID)
+      let projectSectionModel = Object.assign({}, this.projectSectionForm.value);
+      this.projectSectionService.add(projectSectionModel).subscribe((response) => {
+        this.toastrService.success(response.message, "Success");
+        this.getProjectSectionAll()
+      },
+      responseError=>{
+        this.toastrService.error(responseError.error.message)
+      })
+    } else {
+      this.toastrService.error("Your form is missing", "Warning");
+    }
+  }
+
+  deleteProjectSections(projectSection:ProjectSection){
+    this.projectSectionService.delete(projectSection).subscribe((response => {
+      this.toastrService.success(response.message);
+      this.getProjectSectionAll()
+    }),responseError=>{
+      this.toastrService.error(responseError.error.message)
+    })
+  }
+
+  updateProjectSections(){
+    if(this.projectSectionUpdateForm.valid){
+      let projectSectionModel = Object.assign({}, this.projectSectionUpdateForm.value);
+      projectSectionModel.ProjectSectionID=this.projectSection["params"]["projectSectionID"]
+      projectSectionModel.ProjectID=this.projectSection["params"]["projectID"]
+      projectSectionModel.Status=this.projectSection["params"]["status"]
+      this.getProjectSectionAll()
+
+      this.projectSectionService.update(projectSectionModel).subscribe((response) => {
+        this.toastrService.success(response.message, "Success");
+      },responseError=>{
+        this.toastrService.error(responseError.error.message)
+      })
+    } else {
+      this.toastrService.error("Your form is missing", "Warning");
+    }
+  }
+
+  addProjectSectionDepartment(){
+    if(this.projectSectionDepartmentForm.valid){
+      this.projectSectionDepartmentForm.value.ProjectSectionID = Number(this.projectSectionDepartmentForm.value.ProjectSectionID) 
+      this.projectSectionDepartmentForm.value.DepartmentTypeID = Number(this.projectSectionDepartmentForm.value.DepartmentTypeID) 
+      this.projectSectionDepartmentForm.value.Status = true
+      let projectSectionDepartmentModel = Object.assign({}, this.projectSectionDepartmentForm.value);
+      this.projectSectionDepartmentService.add(projectSectionDepartmentModel).subscribe((response) => {
+        this.toastrService.success(response.message, "Success");
+        this.getByAllSectionDepartments()
+      },responseError=>{
+        this.toastrService.error(responseError.error.message)
+      })
+    } else {
+      this.toastrService.error("Your form is missing", "Warning");
+    }
+  }
+
+  deleteProjectSectionDepartment(projectSectionDepartment : ProjectSectionDepartment){
+    this.projectSectionDepartmentService.delete(projectSectionDepartment).subscribe((response => {
+      this.toastrService.success(response.message);
+      this.getByAllSectionDepartments()
+    }),responseError=>{
+      this.toastrService.error(responseError.error.message)
+    })
+  }
+
+  updateProjectSectionDepartment(){
+    if(this.projectSectionDepartmentUpdateForm.valid){
+      this.projectSectionDepartmentUpdateForm.value.DepartmentTypeID = Number(this.projectSectionDepartmentUpdateForm.value.DepartmentTypeID)
+      let projectSectionDepartmentModel = Object.assign({}, this.projectSectionDepartmentUpdateForm.value);
+      projectSectionDepartmentModel.ProjectSectionDepartmentID=this.projectSectionDepartment["projectSectionDepartmentID"]     
+      projectSectionDepartmentModel.Status=true
+
+      this.projectSectionDepartmentService.update(projectSectionDepartmentModel).subscribe((response) => {
+        this.toastrService.success(response.message, "Success");
+        this.getByAllSectionDepartments()
+      },responseError=>{
+        this.toastrService.error(responseError.error.message)
+      })
+    } else {
+      this.toastrService.error("Your form is missing", "Warning");
+    }
+  }
+
   // PROJECT SECTION STAGE //
 
   
-  // addProjectSections(){
-  //   if(this.projectSectionForm.valid){
-  //     let projectSectionModel = Object.assign({}, this.projectSectionForm.value);
-  //     this.projectSectionService.add(projectSectionModel).subscribe((response) => {
-  //       this.toastrService.success(response.message, "Success");
-  //     },
-  //     (responseError) => {
-  //       if (responseError.error.Errors.length > 0) {
-  //         for (let index = 0; index < responseError.error.Errors.length; index++){
-  //           this.toastrService.error(responseError.error.Errors[index].ErrorMessage, "Verification Error");
-  //         }
-  //       }       
-  //     })
-  //   } else {
-  //     this.toastrService.error("Your form is missing", "Warning");
-  //   }
-  // }
-
-  // deleteProjectSections(projectSection:ProjectSection){
-  //   this.projectSectionService.delete(projectSection).subscribe((response => {
-  //     this.toastrService.success(response.message);
-  //   }),errorResponse=>{
-  //     if (errorResponse.error.error.length>0){
-  //       for(let i=0; i < errorResponse.error.error.length; i++){
-  //         this.toastrService.error(errorResponse.error.error[i].ErrorMessage,"Verification Error");
-  //       }
-  //     }
-  //   })
-  // }
-
-  // updateProjectSections(){
-  //   if(this.projectSectionForm.valid){
-  //     let projectSectionModel = Object.assign({}, this.projectSectionForm.value);
-  //     this.projectSectionService.update(projectSectionModel).subscribe((response) => {
-  //       this.toastrService.success(response.message, "Success");
-  //     },
-  //     (responseError) => {
-  //       if (responseError.error.Errors.length > 0) {
-  //         for (let index = 0; index < responseError.error.Errors.length; index++){
-  //           this.toastrService.error(responseError.error.Errors[index].ErrorMessage, "Verification Error");
-  //         }
-  //       }       
-  //     })
-  //   } else {
-  //     this.toastrService.error("Your form is missing", "Warning");
-  //   }
-  // }
 
   // getByProjectID(ProjectID:number){
   //   this.projectSectionService.getByProjectID(ProjectID).subscribe(response => {
@@ -317,35 +385,9 @@ export class ProjectComponent implements OnInit {
   // }
 
   // PROJECT SECTION DEPARTMENT // 
-  // addProjectSectionDepartment(){
-  //   if(this.projectSectionDepartmentForm.valid){
-  //     let projectSectionDepartmentModel = Object.assign({}, this.projectSectionDepartmentForm.value);
-  //     this.projectSectionDepartmentService.add(projectSectionDepartmentModel).subscribe((response) => {
-  //       this.toastrService.success(response.message, "Success");
-  //     },
-  //     (responseError) => {
-  //       if (responseError.error.Errors.length > 0) {
-  //         for (let index = 0; index < responseError.error.Errors.length; index++){
-  //           this.toastrService.error(responseError.error.Errors[index].ErrorMessage, "Verification Error");
-  //         }
-  //       }       
-  //     })
-  //   } else {
-  //     this.toastrService.error("Your form is missing", "Warning");
-  //   }
-  // }
+  
 
-  // deleteProjectSectionDepartment(projectSectionDepartment : ProjectSectionDepartment){
-  //   this.projectSectionDepartmentService.delete(projectSectionDepartment).subscribe((response => {
-  //     this.toastrService.success(response.message);
-  //   }),errorResponse=>{
-  //     if (errorResponse.error.error.length>0){
-  //       for(let i=0; i < errorResponse.error.error.length; i++){
-  //         this.toastrService.error(errorResponse.error.error[i].ErrorMessage,"Verification Error");
-  //       }
-  //     }
-  //   })
-  // }
+  
 
   // updateWorker(){
   //   if(this.projectSectionDepartmentForm.valid){
@@ -365,13 +407,5 @@ export class ProjectComponent implements OnInit {
   //   }
   // }
 
-  // getBySectionID(SectionID:number){
-  //   this.projectSectionDepartmentService.getBySectionID(SectionID).subscribe(response => {
-  //     this.projectSectionDepartments = response.data,
-  //     this.dataLoaded = true
-  //     if (this.projectSectionDepartments.length == 0) {
-  //       this.toastrService.info("There is no record for your filter.","Result of searching");
-  //     }
-  //   })
-  // }
+  
 }

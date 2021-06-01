@@ -22,7 +22,8 @@ export class ProjectGeneralService {
   }
 
   delete(ProjectID:number): Observable<ResponseModel> {
-    return this.httpClient.post<ResponseModel>(this.apiUrl+"projectgeneral/delete?projectID=",ProjectID);
+    let newPath = this.apiUrl+"projectgeneral/delete?projectID="+ProjectID;
+    return this.httpClient.post<ResponseModel>(newPath,null);
   }
 
   update(project:Project): Observable<ResponseModel> {

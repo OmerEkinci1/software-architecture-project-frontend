@@ -34,13 +34,6 @@ export class ProjectWorkerWorkingTimeComponent implements OnInit {
 
   ngOnInit(): void {
     this.getProjectWorkerWorkingTimes()
-    this.createProjectWorkerWorkingTime()
-    this.activatedRoute.queryParams.subscribe((params) => {
-      if(params['ProjectWorkerID'])
-        this.getByProjectWorkerID(params['ProjectWorkerID'])
-      else
-        this.getProjectWorkerWorkingTimes()
-    })
   }
 
   projectWorkerWorkingTimeForm : FormGroup
@@ -48,16 +41,16 @@ export class ProjectWorkerWorkingTimeComponent implements OnInit {
 
   openModal(template: TemplateRef<any>,pwdto:ProjectWorkerWorkingTimeDto){
     this.projectWorkerWorkingTimeDtoSingle=pwdto
-    console.log(this.projectWorkerWorkingTimeDtoSingle)
+    this.createProjectWorkerWorkingTime()
     this.modalRef = this.modalService.show(template);
   }
 
   createProjectWorkerWorkingTime () {
     this.projectWorkerWorkingTimeForm = this.formBuilder.group({
-      // Date:[this.projectWorkerWorkingTimeDtoSingle.Date],
-      // ProjectWorkerID:[this.projectWorkerWorkingTimeDtoSingle["workerName"] +this.projectWorkerWorkingTimeDtoSingle["workerSurname"]],
-      DailyStartHour:['', Validators.required],
-      DailyFinishHour:['', Validators.required],
+      //Date:[this.projectWorkerWorkingTimeDtoSingle.Date],
+      //ProjectWorkerID:[this.projectWorkerWorkingTimeDtoSingle["workerName"] +this.projectWorkerWorkingTimeDtoSingle["workerSurname"]],
+      DailyStartHour:[this.projectWorkerWorkingTimeDtoSingle["dailyStartHour"], Validators.required],
+      DailyFinishHour:[this.projectWorkerWorkingTimeDtoSingle["dailyFinishHour"], Validators.required],
     })
   }
 
@@ -65,7 +58,6 @@ export class ProjectWorkerWorkingTimeComponent implements OnInit {
     this.projectWorkerWorkingTimeService.getAll().subscribe((response) => {
       this.projectWorkerWorkingTimeDto = response.data
       this.dataLoaded = true
-      console.log(response.data)
     })
   }
 
@@ -82,25 +74,17 @@ export class ProjectWorkerWorkingTimeComponent implements OnInit {
   
 
   updateProjectWorkerWorkingTimes(){
-    console.log("geldi")
-    console.log(this.projectWorkerWorkingTimeForm.value)
     if(this.projectWorkerWorkingTimeForm.valid){
-      console.log("girdi")
-      console.log(this.projectWorkerWorkingTimeDtoSingle)
       let projectWorkerWorkingTimeModel=new ProjectWorkerWorkingTime(this.projectWorkerWorkingTimeDtoSingle["projectWorkerWorkingTimeID"],this.projectWorkerWorkingTimeDtoSingle["projectWorkerID"],
       this.projectWorkerWorkingTimeForm.value.DailyStartHour,this.projectWorkerWorkingTimeForm.value.DailyFinishHour,this.projectWorkerWorkingTimeDtoSingle["date"])
-      console.log(projectWorkerWorkingTimeModel)
       this.projectWorkerWorkingTimeService.update(projectWorkerWorkingTimeModel).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
+        this.getProjectWorkerWorkingTimes()
       },
-      (responseError) => {
-        if (responseError.error.Errors.length > 0) {
-          for (let index = 0; index < responseError.error.Errors.length; index++){
-            this.toastrService.error(responseError.error.Errors[index].ErrorMessage, "Verification Error");
-          }
-        }       
+      responseError=>{
+        this.toastrService.error(responseError.error.message)
       })
-    } else {
+    }else {
       this.toastrService.error("Your form is missing", "Warning");
     }
   }
