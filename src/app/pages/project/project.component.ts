@@ -328,10 +328,12 @@ export class ProjectComponent implements OnInit {
 
   addProjectSectionDepartment(){
     if(this.projectSectionDepartmentForm.valid){
+      console.log("girdi")
       this.projectSectionDepartmentForm.value.ProjectSectionID = Number(this.projectSectionDepartmentForm.value.ProjectSectionID) 
       this.projectSectionDepartmentForm.value.DepartmentTypeID = Number(this.projectSectionDepartmentForm.value.DepartmentTypeID) 
       this.projectSectionDepartmentForm.value.Status = true
       let projectSectionDepartmentModel = Object.assign({}, this.projectSectionDepartmentForm.value);
+      console.log(projectSectionDepartmentModel)
       this.projectSectionDepartmentService.add(projectSectionDepartmentModel).subscribe((response) => {
         this.toastrService.success(response.message, "Success");
         this.getByAllSectionDepartments()

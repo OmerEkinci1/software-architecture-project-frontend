@@ -64,7 +64,7 @@ export class RegisterComponent implements OnInit {
       localStorage.setItem("expiration",response.data.expiration)
       localStorage.setItem("userID",response.data.userID.toString())      
       this.toastrService.info(response.message);
-      this.router.navigate(['']);
+      this.router.navigate(['dashboard']);
     },responseError=>{
       this.toastrService.error(responseError.error.message)
     });

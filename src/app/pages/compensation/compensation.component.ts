@@ -20,6 +20,7 @@ export class CompensationComponent implements OnInit {
 
   compensations
   compensationAdd
+  workerCompensationDtoForSuggestion
   //compensationDto : WorkerCompensationDto
   workerCompensationDto : WorkerCompensationDto[] = []
   users : User[] = []
@@ -154,6 +155,15 @@ export class CompensationComponent implements OnInit {
       if (this.workerCompensationDto.length == 0) {
         this.toastrService.info("There is no record for your filter.","Result of searching");
       }
+    })
+  }
+
+  suggestion(WorkerID:number){
+    this.compensationService.suggestion(WorkerID).subscribe(response => {
+      console.log(response.data)
+      this.workerCompensationDtoForSuggestion = response.data['compensationAmount'],
+      console.log(this.workerCompensationDtoForSuggestion)
+      this.dataLoaded = true
     })
   }
 

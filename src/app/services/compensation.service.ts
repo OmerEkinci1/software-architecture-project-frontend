@@ -5,6 +5,7 @@ import { Compensation } from '../models/compensations/compensation';
 import { WorkerCompensationDto } from '../models/compensations/workerCompensationDto';
 import { ListResponseModel } from '../models/listResponseModel';
 import { ResponseModel } from '../models/responseModel';
+import { SingleResponseModel } from '../models/singleResponseModel';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +26,11 @@ export class CompensationService {
   getAll(): Observable<ListResponseModel<WorkerCompensationDto>>{
     let newPath = this.apiUrl + "compensations/getall";
     return this.httpClient.get<ListResponseModel<WorkerCompensationDto>>(newPath);
+  }
+
+  suggestion(workerID:number): Observable<SingleResponseModel<WorkerCompensationDto>>{
+    let newPath = this.apiUrl + "compensations/suggestion?workerID="+workerID;
+    return this.httpClient.get<SingleResponseModel<WorkerCompensationDto>>(newPath);
   }
 
   getByUserID(UserID:number): Observable<ListResponseModel<WorkerCompensationDto>>{

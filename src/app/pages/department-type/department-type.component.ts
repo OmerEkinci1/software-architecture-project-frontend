@@ -59,12 +59,8 @@ export class DepartmentTypeComponent implements OnInit {
         this.toastrService.success(response.message, "Success");
         this.getDepartmentTypes()
       },
-      (responseError) => {
-        if (responseError.error.Errors.length > 0) {
-          for (let index = 0; index < responseError.error.Errors.length; index++){
-            this.toastrService.error(responseError.error.Errors[index].ErrorMessage, "Verification Error");
-          }
-        }       
+      responseError=>{
+        this.toastrService.error(responseError.error.message)
       })
     } else {
       this.toastrService.error("Your form is missing", "Warning");
@@ -77,13 +73,8 @@ export class DepartmentTypeComponent implements OnInit {
         this.toastrService.success(response.message, "Success");
         this.getDepartmentTypes()
       },
-      (responseError) => {
-        console.log(responseError.error.Errors)
-        if (responseError.error.Errors.length > 0) {
-          for (let index = 0; index < responseError.error.Errors.length; index++){
-            this.toastrService.error(responseError.error.Errors[index].ErrorMessage, "Verification Error");
-          }
-        }       
+      responseError=>{
+        this.toastrService.error(responseError.error.message)
       })
     } else {
       this.toastrService.error("Your form is missing", "Warning");

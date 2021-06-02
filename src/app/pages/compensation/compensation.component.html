@@ -71,17 +71,18 @@
     <form [formGroup]="compensationForm">
         <div class="mb-3">
           <label >Worker</label>
-          <select formControlName="WorkerID" class="form-control">
-            <option [value]="" disabled selected >Select Worker</option>
+          <select formControlName="WorkerID" class="form-control" (change)='suggestion($event.target.value)'>
             <option *ngFor="let com of worker" [value]="com.workerID">{{com.workerName}} {{com.workerSurname }}</option> 
           </select>
         </div>
         <div class="mb-3">
           <label >User</label>
           <select formControlName="UserID" class="form-control">
-            <option [value]="" disabled selected >Select HR</option>
             <option *ngFor="let com of users" [value]="com.userID">{{com.name}} {{com.surname }}</option> 
           </select>
+        </div>
+        <div class="mb-3">
+          <label>Suggested Compensation Amount: {{ workerCompensationDtoForSuggestion }}</label>
         </div>
         <div class="mb-3">
           <label>Compensation Amount</label>
@@ -111,7 +112,7 @@
         <div class="mb-3">
           <label>Worker Surname</label>
           <input [(ngModel)]="compensations.workerSurname" disabled="true" type="text" formControlName="WorkerSurname"class="form-control">
-      </div>
+        </div>
         <div class="mb-3">
           <label>HR Name</label>
           <input [(ngModel)]="compensations.name" disabled="true" type="text" formControlName="UserName" class="form-control">
